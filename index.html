@@ -15,9 +15,12 @@
 html,body{margin:0;height:100%;background:#cfe3df;color:var(--inkt);overflow:hidden}
 #wrap{position:fixed;inset:0;height:100dvh;background:#cfe3df;touch-action:none;overflow:hidden}
 #c{display:block;width:100%;height:100%}
-h1{position:absolute;z-index:2;left:max(18px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top));margin:0;pointer-events:none;
+#titel{position:absolute;z-index:2;left:max(18px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top));right:16px;pointer-events:none}
+h1{margin:0;
  font:400 clamp(40px,8.5vw,104px)/.95 'Shrikhand',Georgia,serif;letter-spacing:.005em;color:var(--creme);
  text-shadow:3px 3px 0 var(--blauw),6px 6px 0 rgba(22,33,58,.25);-webkit-text-stroke:1px rgba(30,79,168,.35)}
+#titel p{margin:.55em 0 0 .2em;font:700 clamp(11px,1.45vw,17px)/1.35 Inter,system-ui,sans-serif;letter-spacing:.16em;color:var(--creme);text-shadow:1px 1px 0 var(--blauw),0 1px 6px rgba(22,33,58,.45)}
+#titel p span{white-space:nowrap}
 /* knoppen uit de werkversie: Opbouw, Schoon beeld en hulptekst blijven verborgen */
 #hint,#opb,#opbLabel,#err{display:none!important}
 #views{position:absolute;z-index:2;left:0;right:0;bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:8px;padding:0 max(14px,env(safe-area-inset-left));
@@ -35,7 +38,7 @@ h1{position:absolute;z-index:2;left:max(18px,env(safe-area-inset-left));top:max(
 </head>
 <body>
 <div id="wrap">
- <h1>De Koffieboot</h1>
+ <div id="titel"><h1>De Koffieboot</h1><p><span>SNEL GENOEG OM MEE TE NEMEN.</span> <span>WARM GENOEG OM TE BLIJVEN</span></p></div>
  <canvas id="c" aria-label="3D-scène van De Koffieboot aan het Zijkanaal"></canvas>
  <div id="hint"></div>
  <div id="laden">De boot komt eraan…</div>
