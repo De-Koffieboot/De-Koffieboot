@@ -1282,13 +1282,14 @@ const STIJL=(()=>{
  S.pass=new THREE.ShaderPass({uniforms:{tDiffuse:{value:null},res:{value:new THREE.Vector2(1,1)},stap:{value:1},sat:{value:.8},aard:{value:1},nacht:{value:0}},
   vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
   fragmentShader:'#define R '+R+'\nvarying vec2 vUv;uniform sampler2D tDiffuse;uniform vec2 res;uniform float stap,sat,aard,nacht;'+
-  'void main(){vec2 px=stap/res;vec3 m0=vec3(0.),m1=m0,m2=m0,m3=m0,s0=m0,s1=m0,s2=m0,s3=m0;'+
-  'for(int j=-R;j<=R;j++)for(int i=-R;i<=R;i++){vec3 c=texture2D(tDiffuse,vUv+vec2(float(i),float(j))*px).rgb,c2=c*c;'+
+  'vec3 t(vec2 u){return clamp(texture2D(tDiffuse,u).rgb,0.,1.);}void main(){vec2 px=stap/res;vec3 m0=vec3(0.),m1=m0,m2=m0,m3=m0,s0=m0,s1=m0,s2=m0,s3=m0;'+
+  'for(int j=-R;j<=R;j++)for(int i=-R;i<=R;i++){vec3 c=t(vUv+vec2(float(i),float(j))*px),c2=c*c;'+
   'if(i<=0&&j<=0){m0+=c;s0+=c2;}if(i>=0&&j<=0){m1+=c;s1+=c2;}if(i<=0&&j>=0){m2+=c;s2+=c2;}if(i>=0&&j>=0){m3+=c;s3+=c2;}}'+
   'float n=float((R+1)*(R+1));m0/=n;m1/=n;m2/=n;m3/=n;'+
   'vec3 v0=s0/n-m0*m0,v1=s1/n-m1*m1,v2=s2/n-m2*m2,v3=s3/n-m3*m3;'+
-  'float w0=1./(1e-5+pow(v0.r+v0.g+v0.b,1.6)),w1=1./(1e-5+pow(v1.r+v1.g+v1.b,1.6)),w2=1./(1e-5+pow(v2.r+v2.g+v2.b,1.6)),w3=1./(1e-5+pow(v3.r+v3.g+v3.b,1.6));'+
-  'vec3 c=(m0*w0+m1*w1+m2*w2+m3*w3)/(w0+w1+w2+w3);'+
+  'float q0=max(v0.r+v0.g+v0.b,0.),q1=max(v1.r+v1.g+v1.b,0.),q2=max(v2.r+v2.g+v2.b,0.),q3=max(v3.r+v3.g+v3.b,0.);'+
+  'float w0=1./(1e-4+q0*q0*400.),w1=1./(1e-4+q1*q1*400.),w2=1./(1e-4+q2*q2*400.),w3=1./(1e-4+q3*q3*400.);'+
+  'vec3 c=(m0*w0+m1*w1+m2*w2+m3*w3)/(w0+w1+w2+w3);c=mix(c,t(vUv),.25);if(!(dot(c,vec3(1.))>=0.))c=t(vUv);'+
   // aards palet: gedempt, blauw blijft herkenbaar (pont), warme schaduw (olijf-bruin) en crème licht, matte zwarten
   'float l=dot(c,vec3(.299,.587,.114));float blauw=smoothstep(.04,.18,c.b-max(c.r,c.g));c=mix(vec3(l),c,mix(sat,.94,blauw));'+
   'vec3 sch=mix(vec3(.30,.27,.21),vec3(.2,.28,.28),nacht),lic=mix(vec3(1.05,.98,.84),vec3(1.,.9,.78),nacht);'+
@@ -1297,7 +1298,7 @@ const STIJL=(()=>{
   'gl_FragColor=vec4(c,1.);}'});
  S.pass.material.name='stijl schilderfilter';
  S.plaats=()=>{if(!composer||!grade)return false;const i=composer.passes.indexOf(grade);if(i<0)return false;composer.passes.splice(i,0,S.pass);S.maat();return true};
- S.maat=()=>{const p=renderer.getPixelRatio();S.pass.uniforms.res.value=grade.uniforms.res.value;S.pass.uniforms.stap.value=Math.max(1,p*.75)};
+ S.maat=()=>{const p=renderer.getPixelRatio();S.pass.uniforms.res.value=grade.uniforms.res.value;S.pass.uniforms.stap.value=1};
  addEventListener('resize',()=>setTimeout(S.maat,0));
  // --- per stand (dag/avond) ---
  S.stand=n=>{const LU=lucht.material.uniforms;
