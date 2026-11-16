@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>De Koffieboot</title>
+<meta name="description" content="De Koffieboot: een Amsterdamse pont als buurtkoffiezaak aan het Zijkanaal in Amsterdam-Noord.">
+<meta name="theme-color" content="#1E4FA8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap">
+<style>
+/* Kale website: titel bovenin, de 3D-scène vult de rest van het scherm */
+:root{--blauw:#1E4FA8;--creme:#f4efe4;--inkt:#16213a}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--creme);color:var(--inkt);overflow:hidden}
+body{display:flex;flex-direction:column;height:100dvh}
+header{flex:0 0 auto;padding:14px max(16px,env(safe-area-inset-left)) 12px;background:var(--creme);border-bottom:3px solid var(--blauw)}
+h1{margin:0;font:700 clamp(26px,5vw,44px)/1 'Space Grotesk',system-ui,sans-serif;letter-spacing:-.01em;color:var(--blauw)}
+#wrap{position:relative;flex:1 1 auto;min-height:0;background:#cfe3df;touch-action:none;overflow:hidden}
+#c{display:block;width:100%;height:100%}
+/* knoppen uit de werkversie blijven bestaan maar zijn verborgen; alleen Dag/Avond is zichtbaar */
+#views,#hint,#opb,#opbLabel,#err{display:none!important}
+#dagnacht{position:absolute;right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));font:700 14px system-ui,sans-serif;padding:10px 16px;border:0;border-radius:999px;background:var(--creme);color:var(--blauw);box-shadow:0 2px 10px rgba(0,0,0,.2);cursor:pointer}
+#dagnacht:focus-visible{outline:3px solid var(--blauw);outline-offset:2px}
+#laden{position:absolute;inset:0;display:grid;place-items:center;font:600 15px system-ui,sans-serif;color:var(--blauw);background:#cfe3df;transition:opacity .6s}
+#laden.weg{opacity:0;pointer-events:none}
+#fout{position:absolute;inset:0;display:none;place-items:center;padding:24px;text-align:center;font:15px system-ui,sans-serif}
+</style>
+</head>
+<body>
+<header><h1>De Koffieboot</h1></header>
+<div id="wrap">
+ <canvas id="c" aria-label="3D-scène van De Koffieboot aan het Zijkanaal"></canvas>
+ <div id="hint"></div>
+ <div id="laden">De boot komt eraan…</div>
+ <div id="fout">De 3D-weergave kan in deze browser niet laden.</div>
+ <button id="dagnacht" type="button">Avond</button>
+</div>
+<div id="views"></div><div id="err"></div>
+<script src="lib/three.min.js"></script>
+<script src="js/three-extra.js"></script>
+<script src="mensen/mensen-data.js"></script>
+<script src="js/scene.js"></script>
+<script>
+// Dag/Avond-knop stuurt de (verborgen) knop van de scène aan; laadscherm weg zodra de scène er is
+(function(){const b=document.getElementById('dagnacht');
+ b.onclick=()=>{const k=[...document.querySelectorAll('#views button')].find(x=>x.textContent==='Avond'||x.textContent==='Dag');if(!k)return;k.click();b.textContent=k.textContent};
+ if(window.koffieboot)document.getElementById('laden').classList.add('weg');else{document.getElementById('laden').style.display='none';document.getElementById('fout').style.display='grid'}})();
+</script>
+</body>
+</html>
