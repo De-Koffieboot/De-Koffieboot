@@ -1237,6 +1237,80 @@ deel('Romp','Roosters').children.forEach(o=>{o.scale.y=.42;o.position.y=1.5});
  // broodmanden op de houten werkbank aan de kadekant (zichtbaar door de etalage aan de steiger)
  for(const x of [-10.9,-9.9,-8.9]){const mand=G.m(new THREE.CylinderGeometry(.2,.16,.16,14,1,true),G.rotan,PR,x,BV+1.02,3.72);for(let k=0;k<5;k++){const b=G.m(AD.bolG,k%2?korst:korstD,PR,x+Math.cos(k*1.26)*.09,BV+1.08+(k===4?.05:0),3.72+Math.sin(k*1.26)*.09,0,k,0);b.scale.set(.09,.06,.07)}}}
 
+// ===== STIJLRONDE v0.35: dichter bij de Midjourney-stills (gouache-poster, gedempt aards palet, geen glans) =====
+// Wat hier gebeurt: 1) materialen mat en zonder spiegeling, 2) gedempte kleuren (gras, bomen, vlaggen, mensen),
+// 3) geschilderde lucht en rustig spiegelend water, 4) kleinere lampjes, 5) Het Buurtloket als Nederlands straatnaambord,
+// 6) een schilder-filter (Kuwahara) met aards palet vóór de bestaande kleurcorrectie.
+const STIJL=(()=>{
+ const S={};
+ // --- 1. materialen: mat, geen metaalglans, minder omgevingsspiegeling (behalve glas en water) ---
+ const glans=/glas|raam|water|koper|lamp|bol/i;
+ S.matteer=()=>{const gezien=new Set();scene.traverse(o=>{if(!o.isMesh)return;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
+  if(!m||gezien.has(m)||!m.isMeshStandardMaterial)return;gezien.add(m);if(glans.test(m.name||''))return;if(m===mat.glas||m===mat.raam)return;
+  m.roughness=Math.max(m.roughness,.82);m.metalness=Math.min(m.metalness,.08);m.envMapIntensity=Math.min(m.envMapIntensity,.35)})})};
+ // --- 2. gedempte kleuren ---
+ const demp=(m,f,warm)=>{if(!m||!m.color)return;const h={};m.color.getHSL(h);m.color.setHSL(h.h+(warm||0),h.s*f,h.l)};
+ mat.gras.color.set(0x9b9a63);mat.gras.bumpScale=.5;                                    // olijf-oker gras zoals de kade in het hoofdbeeld
+ S.dempNatuur=()=>{const gezien=new Set();scene.traverse(o=>{if(!o.isMesh)return;const m=o.material;if(!m||Array.isArray(m)||gezien.has(m))return;gezien.add(m);const n=m.name||'';
+  if(/blad|haag|riet|struik|plant|lavendel|siergras|geranium|bloem/i.test(n)){demp(m,.55,-.015)}
+  else if(/vlag/i.test(n)||(o.name||'').indexOf('vlaggetjes')===0){m.color&&m.color.set(0xcfc3a8)}}) };
+ // mensen: Rocketbox-texturen minder fel en iets warmer, platter licht (als geschilderde figuurtjes)
+ S.mensen=()=>{const gezien=new Set();scene.traverse(o=>{if(!o.isMesh||!o.material||!o.material.map)return;const m=o.material;if(gezien.has(m)||!/(body|head|opacity)$/.test(m.name||''))return;gezien.add(m);
+  m.roughness=1;m.envMapIntensity=.2;m.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>',
+   '#include <map_fragment>\n{float l=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb=mix(vec3(l),diffuseColor.rgb,.55)*vec3(1.06,1.,.88);diffuseColor.rgb=floor(diffuseColor.rgb*7.+.5)/7.;}')
+   .replace('#include <lights_fragment_end>','#include <lights_fragment_end>\n reflectedLight.indirectDiffuse*=1.35;')};m.needsUpdate=true})};
+ // --- 3. lucht: stapelwolken groter en meer, turquoise-grijze hemel; water: groot rustig patroon, groen-grijs, zachte zon ---
+ if(lucht.material.fragmentShader.indexOf('vec2(1.3,2.3)')<0)console.warn('STIJL: luchtschaal niet gevonden');lucht.material.fragmentShader=lucht.material.fragmentShader.replace('vec2(1.3,2.3)','vec2(.62,1.15)');lucht.material.needsUpdate=true;
+ // --- 4. lampjes: kleiner (lichtsnoeren, slingers, kraan) ---
+ S.lampjes=()=>{scene.traverse(o=>{if(o.isMesh&&o.material===mat.lamp&&o.geometry.type==='SphereGeometry'&&o.geometry.parameters.radius<.2)o.scale.multiplyScalar(.55)})};
+ // --- 5. HET BUURTLOKET als straatnaambord: blauw, afgeronde hoeken, witte binnenrand, naam in gewone schrijfwijze, ondertekst eronder ---
+ const rr=(g,x,y,w,h,r)=>{g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()};
+ S.straatbord=(w,h)=>{const c=document.createElement('canvas');c.width=1024;c.height=Math.round(1024*h/w);const g=c.getContext('2d'),W=c.width,H=c.height,t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;
+  const teken=()=>{g.clearRect(0,0,W,H);g.fillStyle='#1d3f87';rr(g,0,0,W,H,H*.16);g.fill();
+   g.strokeStyle='#f7f8f6';g.lineWidth=H*.045;rr(g,H*.09,H*.09,W-H*.18,H*.62,H*.1);g.stroke();
+   g.fillStyle='#f7f8f6';g.textAlign='center';g.textBaseline='middle';let fs=H*.44;g.font='600 '+fs+'px "Barlow Condensed","Arial Narrow",Arial,sans-serif';
+   while(g.measureText('Het Buurtloket').width>W-H*.6&&fs>10){fs-=2;g.font='600 '+fs+'px "Barlow Condensed","Arial Narrow",Arial,sans-serif'}
+   g.fillText('Het Buurtloket',W/2,H*.41);g.font='500 '+(H*.15)+'px "Barlow Condensed","Arial Narrow",Arial,sans-serif';g.fillText('Halen · Eten · Blijven',W/2,H*.86);t.needsUpdate=true};
+  teken();if(document.fonts&&document.fonts.load)document.fonts.load('600 40px "Barlow Condensed"').then(teken).catch(()=>{});
+  return new THREE.MeshBasicMaterial({map:t,transparent:true,toneMapped:false,fog:true})};
+ {const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&display=swap';document.head.appendChild(l)}
+ S.borden=()=>{const W2=[];scene.traverse(o=>{if(o.isMesh&&o.geometry.type==='PlaneGeometry'&&o.material&&o.material.map&&o.material.map.image&&o.material.map.image.tagName==='CANVAS'){
+   const p=o.geometry.parameters,ok=(Math.abs(p.width-2.8)<.01&&Math.abs(p.height-.5)<.01)||(Math.abs(p.width-3.6)<.01&&Math.abs(p.height-.65)<.01);if(ok)W2.push(o)}});
+  W2.forEach(o=>{const p=o.geometry.parameters,h=p.width*.3;o.geometry=new THREE.PlaneGeometry(p.width,h);o.position.y+=(h-p.height)/2-.05;o.material=S.straatbord(p.width,h)});return W2.length};
+ // --- 6. schilderfilter: Kuwahara (vlakken met behouden randen, als gouache) + aards palet ---
+ const R=(typeof TELEFOON!=='undefined'&&TELEFOON)?2:3;
+ S.pass=new THREE.ShaderPass({uniforms:{tDiffuse:{value:null},res:{value:new THREE.Vector2(1,1)},stap:{value:1},sat:{value:.8},aard:{value:1},nacht:{value:0}},
+  vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader:'#define R '+R+'\nvarying vec2 vUv;uniform sampler2D tDiffuse;uniform vec2 res;uniform float stap,sat,aard,nacht;'+
+  'void main(){vec2 px=stap/res;vec3 m0=vec3(0.),m1=m0,m2=m0,m3=m0,s0=m0,s1=m0,s2=m0,s3=m0;'+
+  'for(int j=-R;j<=R;j++)for(int i=-R;i<=R;i++){vec3 c=texture2D(tDiffuse,vUv+vec2(float(i),float(j))*px).rgb,c2=c*c;'+
+  'if(i<=0&&j<=0){m0+=c;s0+=c2;}if(i>=0&&j<=0){m1+=c;s1+=c2;}if(i<=0&&j>=0){m2+=c;s2+=c2;}if(i>=0&&j>=0){m3+=c;s3+=c2;}}'+
+  'float n=float((R+1)*(R+1));m0/=n;m1/=n;m2/=n;m3/=n;'+
+  'vec3 v0=s0/n-m0*m0,v1=s1/n-m1*m1,v2=s2/n-m2*m2,v3=s3/n-m3*m3;'+
+  'float w0=1./(1e-5+pow(v0.r+v0.g+v0.b,1.6)),w1=1./(1e-5+pow(v1.r+v1.g+v1.b,1.6)),w2=1./(1e-5+pow(v2.r+v2.g+v2.b,1.6)),w3=1./(1e-5+pow(v3.r+v3.g+v3.b,1.6));'+
+  'vec3 c=(m0*w0+m1*w1+m2*w2+m3*w3)/(w0+w1+w2+w3);'+
+  // aards palet: gedempt, blauw blijft herkenbaar (pont), warme schaduw (olijf-bruin) en crème licht, matte zwarten
+  'float l=dot(c,vec3(.299,.587,.114));float blauw=smoothstep(.04,.18,c.b-max(c.r,c.g));c=mix(vec3(l),c,mix(sat,.94,blauw));'+
+  'vec3 sch=mix(vec3(.30,.27,.21),vec3(.2,.28,.28),nacht),lic=mix(vec3(1.05,.98,.84),vec3(1.,.9,.78),nacht);'+
+  'c=mix(c,c*mix(sch/.26,lic,smoothstep(.15,.85,l)),.32*aard);'+
+  'c=(c-.42)*1.12+.42;c=c*.95+mix(vec3(.03,.026,.016),vec3(.035,.05,.05),nacht);'+
+  'gl_FragColor=vec4(c,1.);}'});
+ S.pass.material.name='stijl schilderfilter';
+ S.plaats=()=>{if(!composer||!grade)return false;const i=composer.passes.indexOf(grade);if(i<0)return false;composer.passes.splice(i,0,S.pass);S.maat();return true};
+ S.maat=()=>{const p=renderer.getPixelRatio();S.pass.uniforms.res.value=grade.uniforms.res.value;S.pass.uniforms.stap.value=Math.max(1,p*.75)};
+ addEventListener('resize',()=>setTimeout(S.maat,0));
+ // --- per stand (dag/avond) ---
+ S.stand=n=>{const LU=lucht.material.uniforms;
+  LU.top.value.set(n?0x4f8890:0x5f9fb4);LU.hor.value.set(n?0xf4bc7c:0xf2dfb6);LU.wolkL.value.set(n?0xffa860:0xfffaee);LU.wolkS.value.set(n?0x56707a:0xb8c4c2);LU.glow.value.set(n?0xff8444:0xffe2b8);LU.dek.value=n?.5:.43;
+  const WU=water.material.uniforms;WU.waterColor.value.set(n?0x1f5a58:0x3f8a72);WU.sunColor.value.set(n?0xff8a50:0xc8b894);WU.distortionScale.value=n?.1:.13;WU.size.value=n?4:3.5;
+  if(!n){hemi.intensity=.5;sun.intensity=1.2;sun.color.set(0xffd49a)}
+  mat.lamp.emissiveIntensity=n?2.0:.12;
+  if(grade){grade.uniforms.sat.value=1.0;grade.uniforms.poster.value=n?.3:.45}
+  S.pass.uniforms.nacht.value=n?1:0;S.pass.uniforms.sat.value=n?.88:.9};
+ S.matteer();S.dempNatuur();S.mensen();S.lampjes();S.aantalBorden=S.borden();S.geplaatst=S.plaats();
+ setTimeout(()=>{const s=setNight;setNight=function(n){s(n);S.stand(n)};S.stand(false)},0);
+ return S})();
+
 // ===== OPBOUW: namen voor materialen en vormen, paneel "Opbouw" en klikken op de boot =====
 {const MN={rood:'pontblauw'};for(const k in mat)if(mat[k]&&mat[k].isMaterial&&!mat[k].name)mat[k].name=MN[k]||k;
  Object.entries({glasH,staalM,tegel,koper,blauwD,witD,klepM,dakM}).forEach(([k,m])=>{if(!m.name)m.name=k});
