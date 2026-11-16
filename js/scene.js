@@ -513,8 +513,8 @@ function gevelTex(basis,voeg){const c=document.createElement('canvas'),e=documen
  x.fillStyle=voeg;for(let r=0;r<96;r++)x.fillRect(0,r*5.33+4.6,512,.7);
  y.fillStyle='#000';y.fillRect(0,0,512,512);
  for(let f=0;f<4;f++)for(let k=0;k<4;k++){const deur=(k+f)%2===0,ww=(deur?2.2:1.7)*px,wh=(deur?2.55:2.05)*py,wx=k*TRAV*px+(TRAV*px-ww)/2,wy=(f*VL+(deur?.25:.55))*py;
-  x.fillStyle='#24211f';x.fillRect(wx-4,wy-4,ww+8,wh+8);const g=x.createLinearGradient(0,wy,0,wy+wh);g.addColorStop(0,'#8a9aa4');g.addColorStop(.5,'#4a565e');g.addColorStop(1,'#262d32');x.fillStyle=g;x.fillRect(wx,wy,ww,wh);
-  x.fillStyle='#24211f';x.fillRect(wx+ww*.5-2,wy,4,wh);x.fillStyle='rgba(0,0,0,.25)';x.fillRect(wx-4,wy+wh+4,ww+8,5); // stijl en lateischaduw
+  x.fillStyle='#ece6da';x.fillRect(wx-4,wy-4,ww+8,wh+8);const g=x.createLinearGradient(0,wy,0,wy+wh);g.addColorStop(0,'#a9bcc2');g.addColorStop(.5,'#6f858c');g.addColorStop(1,'#4b5a60');x.fillStyle=g;x.fillRect(wx,wy,ww,wh);
+  x.fillStyle='#ece6da';x.fillRect(wx+ww*.5-2,wy,4,wh);x.fillStyle='rgba(0,0,0,.25)';x.fillRect(wx-4,wy+wh+4,ww+8,5); // stijl en lateischaduw
   if(Math.random()<.32){y.fillStyle=['#ffcf8a','#ffe2b0','#ffb86a'][Math.random()*3|0];y.globalAlpha=.5+Math.random()*.5;y.fillRect(wx,wy,ww,wh);y.globalAlpha=1}}
  const mk=cv=>{const t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;return t};return [mk(c),mk(e)]}
 const facB=gevelTex('#b05a3e','rgba(220,205,190,.35)'),facL=gevelTex('#d6c8b2','rgba(150,140,125,.35)'),gevels=[];
@@ -532,7 +532,7 @@ function blok(x,w,lagen,licht){const gr=x>=0?noord:zuid,k=x>=0?'noord':'zuid',fa
  box(w2+.3,.35,D-3.7,balkPlaat,x-w*.12,y0+h+VL+.6,Z-1,gr);hek[k].push([x,y0+h+.95,Z+D/2-.05,w-.6,1,.04]);
  // balkons: hoekbalkons op elke laag, in het midden om en om
  const n=Math.floor(w/TRAV),x0=x-n*TRAV/2+TRAV/2;
- for(let f=1;f<lagen;f++)for(let i=0;i<n;i++){if(!(i===0||i===n-1||(i+f)%3===0))continue;const bx=x0+i*TRAV,by=y0+f*VL,bz=Z+D/2+.75;
+ for(let f=1;f<lagen;f++)for(let i=0;i<n;i++){const bx=x0+i*TRAV,by=y0+f*VL,bz=Z+D/2+.75;
   balk[k].push([bx,by,bz,TRAV-.1,.22,1.5]);hek[k].push([bx,by+.6,bz+.73,TRAV-.1,1,.04]);}}
 [[-100,34,7,0],[-60,30,8,0],[-28,20,4,1],[10,32,9,0],[50,36,8,0],[92,30,7,0]].forEach(([x,w,l,li])=>blok(x,w,l,li));
 // balkonplaten en hekken als instanties (veel stuks, weinig rekenwerk)
@@ -1247,17 +1247,17 @@ const STIJL=(()=>{
  const glans=/glas|raam|water|koper|lamp|bol/i;
  S.matteer=()=>{const gezien=new Set();scene.traverse(o=>{if(!o.isMesh)return;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
   if(!m||gezien.has(m)||!m.isMeshStandardMaterial)return;gezien.add(m);if(glans.test(m.name||''))return;if(m===mat.glas||m===mat.raam)return;
-  m.roughness=Math.max(m.roughness,.82);m.metalness=Math.min(m.metalness,.08);m.envMapIntensity=Math.min(m.envMapIntensity,.35)})})};
+  m.roughness=Math.max(m.roughness,.7);m.metalness=Math.min(m.metalness,.08);m.envMapIntensity=Math.min(m.envMapIntensity,.35)})})};
  // --- 2. gedempte kleuren ---
  const demp=(m,f,warm)=>{if(!m||!m.color)return;const h={};m.color.getHSL(h);m.color.setHSL(h.h+(warm||0),h.s*f,h.l)};
- mat.gras.color.set(0x9b9a63);mat.gras.bumpScale=.5;                                    // olijf-oker gras zoals de kade in het hoofdbeeld
+ mat.gras.color.set(0x8f9a52);mat.gras.bumpScale=.5;                                    // olijf-oker gras zoals de kade in het hoofdbeeld
  S.dempNatuur=()=>{const gezien=new Set();scene.traverse(o=>{if(!o.isMesh)return;const m=o.material;if(!m||Array.isArray(m)||gezien.has(m))return;gezien.add(m);const n=m.name||'';
-  if(/blad|haag|riet|struik|plant|lavendel|siergras|geranium|bloem/i.test(n)){demp(m,.55,-.015)}
+  if(/blad|haag|riet|struik|plant|lavendel|siergras|geranium|bloem/i.test(n)){demp(m,.8,-.01)}
   else if(/vlag/i.test(n)||(o.name||'').indexOf('vlaggetjes')===0){m.color&&m.color.set(0xcfc3a8)}}) };
  // mensen: Rocketbox-texturen minder fel en iets warmer, platter licht (als geschilderde figuurtjes)
  S.mensen=()=>{const gezien=new Set();scene.traverse(o=>{if(!o.isMesh||!o.material||!o.material.map)return;const m=o.material;if(gezien.has(m)||!/(body|head|opacity)$/.test(m.name||''))return;gezien.add(m);
   m.roughness=1;m.envMapIntensity=.2;m.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>',
-   '#include <map_fragment>\n{float l=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb=mix(vec3(l),diffuseColor.rgb,.55)*vec3(1.06,1.,.88);diffuseColor.rgb=floor(diffuseColor.rgb*7.+.5)/7.;}')
+   '#include <map_fragment>\n{float l=dot(diffuseColor.rgb,vec3(.3,.59,.11));diffuseColor.rgb=mix(vec3(l),diffuseColor.rgb,.85)*vec3(1.04,1.,.92);}')
    .replace('#include <lights_fragment_end>','#include <lights_fragment_end>\n reflectedLight.indirectDiffuse*=1.35;')};m.needsUpdate=true})};
  // --- 3. lucht: stapelwolken groter en meer, turquoise-grijze hemel; water: groot rustig patroon, groen-grijs, zachte zon ---
  if(lucht.material.fragmentShader.indexOf('vec2(1.3,2.3)')<0)console.warn('STIJL: luchtschaal niet gevonden');lucht.material.fragmentShader=lucht.material.fragmentShader.replace('vec2(1.3,2.3)','vec2(.62,1.15)');lucht.material.needsUpdate=true;
@@ -1300,17 +1300,149 @@ const STIJL=(()=>{
  S.plaats=()=>{if(!composer||!grade)return false;const i=composer.passes.indexOf(grade);if(i<0)return false;composer.passes.splice(i,0,S.pass);S.maat();return true};
  S.maat=()=>{const p=renderer.getPixelRatio();S.pass.uniforms.res.value=grade.uniforms.res.value;S.pass.uniforms.stap.value=1};
  addEventListener('resize',()=>setTimeout(S.maat,0));
+ // --- v2: getekend licht (heldere tonen), warm palet, geschilderd water, warme ramen ---
+ // getekend licht: de zonkant wordt in twee heldere tonen gezet in plaats van een glijdend verloop (illustratie, geen filter)
+ {const C=THREE.ShaderChunk,a='vec3 irradiance = dotNL * directLight.color;';
+  if(C.lights_physical_pars_fragment.indexOf(a)<0)console.warn('STIJL: lichtregel niet gevonden');
+  C.lights_physical_pars_fragment=C.lights_physical_pars_fragment.replace(a,'float tn = smoothstep( 0.0, 0.1, dotNL ) * 0.58 + smoothstep( 0.32, 0.46, dotNL ) * 0.42;\n\tvec3 irradiance = tn * directLight.color;')}
+ // water: rustig, lange horizontale reflectiestrepen, kleurvlakken
+ {const wm=water.material;let fs=wm.fragmentShader;const ver=(a,b)=>{if(fs.indexOf(a)<0)console.warn('STIJL water: niet gevonden',a);fs=fs.replace(a,b)};
+  ver('vec4 noise = getNoise( worldPosition.xz * size );','vec2 kp = vec2( dot( worldPosition.xz, vec2( -kijk.y, kijk.x ) ) * 0.08, dot( worldPosition.xz, kijk ) );\n\t\t\t\t\tvec4 noise = getNoise( kp * size );');
+  ver('uniform float size;','uniform float size;\nuniform vec2 kijk;');
+  ver('float rf0 = 0.22;','float rf0 = spiegel;');ver('uniform vec2 kijk;','uniform vec2 kijk;\nuniform float spiegel;');wm.uniforms.spiegel={value:.22};
+  wm.uniforms.kijk={value:new THREE.Vector2(1,0)};const kv=new THREE.Vector3();const oudWR=water.onBeforeRender;water.onBeforeRender=function(r,sc,cam){oudWR.apply(this,arguments);cam.getWorldDirection(kv);if(kv.x*kv.x+kv.z*kv.z>1e-6)wm.uniforms.kijk.value.set(kv.x,kv.z).normalize()};
+  ver('surfaceNormal.xz * vec2(.45,1.5) *','surfaceNormal.xz * vec2(.05,1.6) *');
+  ver('vec3 outgoingLight = albedo','albedo = mix( albedo, floor( albedo * 9.0 + 0.5 ) / 9.0, 0.55 );\n\t\t\t\t\tvec3 outgoingLight = albedo');
+  wm.fragmentShader=fs;wm.needsUpdate=true}
+ // scheepsramen: helder glas zonder spiegeling, zodat je overdag het warme interieur ziet
+ mat.raam.metalness=0;mat.raam.roughness=.3;mat.raam.envMapIntensity=.15;mat.raam.opacity=.06;mat.raam.color.set(0xfff4e0);mat.raam.needsUpdate=true;
+ // flats: witte balkonhekken met spijlen
+ {const c=document.createElement('canvas');c.width=64;c.height=64;const g=c.getContext('2d');g.fillStyle='#f2efe8';g.fillRect(0,0,64,6);g.fillRect(0,58,64,6);for(let x=2;x<64;x+=8)g.fillRect(x,0,3,64);
+  const t=new THREE.CanvasTexture(c);t.wrapS=THREE.RepeatWrapping;t.repeat.set(6,1);hekMat.map=t;hekMat.color.set(0xffffff);hekMat.transparent=false;hekMat.opacity=1;hekMat.alphaTest=.5;hekMat.metalness=0;hekMat.roughness=.6;hekMat.side=THREE.DoubleSide;hekMat.needsUpdate=true;
+  balkPlaat.color.set(0xe9e4da)}
+ // kleurcorrectie iets meer contrast (minder waas)
+ if(grade){const f=grade.material.fragmentShader;if(f.indexOf('c=(c-.5)*1.1+.5;')<0)console.warn('STIJL: contrastregel niet gevonden');grade.material.fragmentShader=f.replace('c=(c-.5)*1.1+.5;','c=(c-.5)*1.2+.5;');grade.material.needsUpdate=true}
+ // inktlijnen (proef): dunne donkere omtrek rond de pont via een achterkant-schil, alleen als ?inkt in de url staat
+ S.inkt=()=>{const im=new THREE.MeshBasicMaterial({color:0x14213d,side:THREE.BackSide,fog:true});im.name='inktlijn';
+  im.onBeforeCompile=sh=>{sh.vertexShader=sh.vertexShader.replace('#include <project_vertex>','vec4 mvp0 = modelViewMatrix * vec4( transformed, 1.0 );\n transformed += normalize( normal ) * 0.012 * max( -mvp0.z, 1.0 ) * 0.25;\n#include <project_vertex>')};
+  const lijst=[];pont.traverse(o=>{if(o.isMesh&&!o.isInstancedMesh&&o.geometry&&o.geometry.attributes.normal&&!/raam|glas/i.test((o.material&&o.material.name)||'')&&o.parent&&!(o.userData&&o.userData.soort==='persoon'))lijst.push(o)});
+  lijst.forEach(o=>{const h=new THREE.Mesh(o.geometry,im);h.name='inktlijn';h.castShadow=false;h.receiveShadow=false;o.add(h)});return lijst.length};
+ if(/[?&]inkt/.test(location.search))S.aantalInkt=S.inkt();
  // --- per stand (dag/avond) ---
  S.stand=n=>{const LU=lucht.material.uniforms;
-  LU.top.value.set(n?0x4f8890:0x5f9fb4);LU.hor.value.set(n?0xf4bc7c:0xf2dfb6);LU.wolkL.value.set(n?0xffa860:0xfffaee);LU.wolkS.value.set(n?0x56707a:0xb8c4c2);LU.glow.value.set(n?0xff8444:0xffe2b8);LU.dek.value=n?.5:.43;
-  const WU=water.material.uniforms;WU.waterColor.value.set(n?0x1f5a58:0x3f8a72);WU.sunColor.value.set(n?0xff8a50:0xc8b894);WU.distortionScale.value=n?.1:.13;WU.size.value=n?4:3.5;
-  if(!n){hemi.intensity=.5;sun.intensity=1.2;sun.color.set(0xffd49a)}
-  mat.lamp.emissiveIntensity=n?2.0:.12;
-  if(grade){grade.uniforms.sat.value=1.0;grade.uniforms.poster.value=n?.3:.45}
-  S.pass.uniforms.nacht.value=n?1:0;S.pass.uniforms.sat.value=n?.88:.9};
- S.matteer();S.dempNatuur();S.mensen();S.lampjes();S.aantalBorden=S.borden();S.geplaatst=S.plaats();
+  LU.top.value.set(n?0x3f7f8a:0x4f9cc0);LU.hor.value.set(n?0xf4bc7c:0xf2dfb6);LU.wolkL.value.set(n?0xffb070:0xfffaee);LU.wolkS.value.set(n?0x5a7f86:0xb8c4c2);LU.glow.value.set(n?0xff9a50:0xffe2b8);LU.dek.value=n?.5:.43;
+  const WU=water.material.uniforms;WU.waterColor.value.set(n?0x154a4c:0x2f8a7c);WU.sunColor.value.set(n?0xffa060:0xd8c8a4);WU.distortionScale.value=n?.6:.4;WU.size.value=n?8:9;WU.spiegel.value=n?.5:.22;
+  if(!n){hemi.intensity=.42;hemi.color.set(0xcfe6ea);hemi.groundColor.set(0xb58a5e);sun.intensity=1.45;sun.color.set(0xffd096);scene.fog.near=220;scene.fog.far=900}
+  else{scene.fog.color.set(0x4f7f86);scene.background.set(0x4f7f86)}
+  binnen.forEach(l=>{l.intensity=n?1.3:1.1;l.distance=n?11:10});
+  mat.lamp.emissiveIntensity=n?2.6:.15;mat.raam.emissiveIntensity=n?1.2:.12;
+  if(grade){grade.uniforms.sat.value=n?1.12:1.1;grade.uniforms.poster.value=n?.2:.22;grade.uniforms.warm.value=n?1.3:1.05}
+ };
+ S.matteer();S.dempNatuur();S.mensen();S.lampjes();S.aantalBorden=S.borden();
  setTimeout(()=>{const s=setNight;setNight=function(n){s(n);S.stand(n)};S.stand(false)},0);
  return S})();
+
+// ===== FABLE (v0.36f): geschilderde materialen, warm interieur en getekende mensen — alles in de scène zelf, géén nabewerkingsfilter =====
+// 1) drie geschilderde doeken (kwaststreken, planken, toetsen) die via de positie op de boot over de kleur van elk materiaal gaan
+//    (dus ook op vormen zonder nette UV's, en haarscherp: het is gewoon textuur met mipmaps);
+// 2) alles wat bínnen in de kajuit, de salon of het loket staat krijgt een warme eigen gloed, zodat je overdag door de ramen een vol, warm interieur ziet;
+// 3) de mensen krijgen vlakke kleurvelden (minder fotodetail), iets warmer en met een heldere contour-toon.
+const FABLE=(()=>{
+ const F={};
+ let zaad=7;const rnd=()=>(zaad=(zaad*16807)%2147483647)/2147483647,tus=(a,b)=>a+(b-a)*rnd();
+ const doek=teken=>{const c=document.createElement('canvas');c.width=c.height=512;const g=c.getContext('2d');teken(g);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;return t};
+ const rondom=(g,f)=>{for(const dx of [-512,0,512])for(const dy of [-512,0,512]){g.save();g.translate(dx,dy);f();g.restore()}};   // naadloos herhalen
+ const toon=(d,warm)=>{const v=128+d,w=warm||0;return 'rgb('+Math.round(v+w)+','+Math.round(v+w*.3)+','+Math.round(v-w)+')'};  // 128 = neutraal (laat de materiaalkleur ongemoeid)
+ // --- doek 1: KWAST — brede, lange penseelstreken met een paar haren, licht warm / donker koel ---
+ F.kwast=doek(g=>{g.fillStyle=toon(0);g.fillRect(0,0,512,512);g.lineCap='round';
+  for(let i=0;i<150;i++){const x=tus(0,512),y=tus(0,512),L=tus(90,300),br=tus(14,44),h=tus(-.16,.16),d=tus(-26,26),haren=3+(rnd()*3|0);
+   rondom(g,()=>{g.translate(x,y);g.rotate(h);g.globalAlpha=.42;g.strokeStyle=toon(d,d>0?5:-5);g.lineWidth=br;g.beginPath();g.moveTo(-L/2,0);g.quadraticCurveTo(0,tus(-8,8),L/2,0);g.stroke();
+    g.globalAlpha=.3;for(let k=0;k<haren;k++){const o=(k/(haren-1)-.5)*br*.7;g.strokeStyle=toon(d+(k%2?10:-9));g.lineWidth=br*.14;g.beginPath();g.moveTo(-L/2+8,o);g.lineTo(L/2-8,o);g.stroke()}})}});
+ // --- doek 2: PLANKEN — 16 planken per tegel, elke plank een eigen toon, scherpe donkere naad, verspringende kopse naden, een paar lange vegen ---
+ F.planken=doek(g=>{const h=32;g.fillStyle=toon(0);g.fillRect(0,0,512,512);
+  for(let r=0;r<16;r++){let x=-tus(0,200);while(x<512){const w=tus(170,330),d=tus(-20,22);g.fillStyle=toon(d,tus(-4,6));g.fillRect(x,r*h,w,h);
+    for(let k=0;k<3;k++){g.globalAlpha=.3;g.fillStyle=toon(d+tus(-16,16));g.fillRect(x+tus(0,w*.5),r*h+tus(3,h-9),tus(w*.3,w*.6),tus(2,5));g.globalAlpha=1}
+    g.fillStyle=toon(-62,-6);g.fillRect(x+w-2,r*h,2,h);x+=w}
+   g.fillStyle=toon(-70,-8);g.fillRect(0,r*h+h-3,512,3);g.fillStyle=toon(20,6);g.fillRect(0,r*h,512,1)}});
+ // --- doek 3: TOETSEN — korte schuine penseeltoetsen (gras, blad, baksteenvlakken) ---
+ F.toetsen=doek(g=>{g.fillStyle=toon(0);g.fillRect(0,0,512,512);
+  for(let i=0;i<900;i++){const x=tus(0,512),y=tus(0,512),L=tus(16,46),br=tus(6,13),h=tus(-1.9,-1.2),d=tus(-30,30);
+   rondom(g,()=>{g.translate(x,y);g.rotate(h);g.globalAlpha=.6;g.fillStyle=toon(d,d>0?9:-7);g.beginPath();g.ellipse(0,0,L/2,br/2,0,0,7);g.fill()})}});
+ // --- de schildering in de standaard-shader: projectie langs de hoofdas van het vlak, in boot-coördinaten ---
+ scene.updateMatrixWorld(true);
+ F.uInv={value:new THREE.Matrix4().copy(pont.matrixWorld).invert()};F.uGloed={value:.6};
+ const V_P='varying vec3 vFbP;\nvarying vec3 vFbN;\nuniform mat4 fbInv;\n',
+  V_M='#include <begin_vertex>\n{ vec4 fbp = vec4( transformed, 1.0 ); vec3 fbn = objectNormal;\n#ifdef USE_INSTANCING\n fbp = instanceMatrix * fbp; fbn = mat3( instanceMatrix ) * fbn;\n#endif\n vFbP = ( fbInv * modelMatrix * fbp ).xyz; vFbN = mat3( fbInv ) * ( mat3( modelMatrix ) * fbn ); }',
+  F_P='varying vec3 vFbP;\nvarying vec3 vFbN;\nuniform sampler2D fbTex;\nuniform vec3 fbS;\nuniform float fbGloed;\nfloat fbBinnen( vec3 q ) { float bi = step( abs( q.x ), 12.39 ) * step( abs( q.z ), 4.195 ) * step( 1.02, q.y ) * step( q.y, 3.77 );\n bi = max( bi, step( abs( q.x - 8.0 ), 2.96 ) * step( abs( q.z ), 2.72 ) * step( 4.05, q.y ) * step( q.y, 6.58 ) );\n return max( bi, step( abs( q.x + 14.0 ), 1.46 ) * step( abs( q.z ), 3.36 ) * step( 1.02, q.y ) * step( q.y, 3.42 ) ); }\n',
+  F_K='float fbBi = fbBinnen( vFbP );\n{ vec3 an = abs( vFbN ); vec2 fu = an.y > max( an.x, an.z ) ? vFbP.xz : ( an.x > an.z ? vFbP.zy : vFbP.xy );\n diffuseColor.rgb *= mix( vec3( 1.0 ), texture2D( fbTex, fu * fbS.xy ).rgb * 2.0, fbS.z ); diffuseColor.rgb *= mix( vec3( 1.0 ), vec3( 1.0, 0.88, 0.7 ), fbBi ); }',
+  // binnen = kajuit, salon op het dak en het loket: warme eigen gloed (alsof er overal lampen branden)
+  F_G='#include <emissivemap_fragment>\n totalEmissiveRadiance += diffuseColor.rgb * fbGloed * fbBi * vec3( 1.0, 0.8, 0.55 );',
+  // mensen: kleur uit een grover mip-niveau (vlakke kleurvelden, geen fotodetail), warmer, licht geposteriseerd; alfa blijft scherp
+  F_MENS='#ifdef USE_MAP\n{ vec4 t0 = texture2D( map, vUv ); vec4 t1 = texture2D( map, vUv, 2.0 ); t1.a = t0.a; t1 = mapTexelToLinear( t1 );\n vec3 c = t1.rgb; float l = dot( c, vec3( 0.3, 0.59, 0.11 ) ); c = max( mix( vec3( l ), c, 1.25 ), 0.0 ) * vec3( 1.07, 1.0, 0.9 );\n t1.rgb = c; diffuseColor *= t1; }\n#endif\n';
+ const zet=(sh,m,mens)=>{const c=m.userData.fable;sh.uniforms.fbInv=F.uInv;sh.uniforms.fbGloed=F.uGloed;sh.uniforms.fbTex={value:c[0]};sh.uniforms.fbS={value:new THREE.Vector3(c[1],c[2],c[3])};
+  sh.vertexShader=V_P+sh.vertexShader.replace('#include <begin_vertex>',V_M);
+  let f=F_P+sh.fragmentShader;
+  f=mens?f.replace('#include <map_fragment>',F_MENS+F_K).replace('#include <lights_fragment_end>','#include <lights_fragment_end>\n { float fr = 1.0 - abs( dot( normalize( vViewPosition ), normal ) ); float kt = 1.0 - 0.42 * smoothstep( 0.62, 0.86, fr ); reflectedLight.indirectDiffuse *= 1.3 * kt; reflectedLight.directDiffuse *= kt; }'):f.replace('#include <map_fragment>','#include <map_fragment>\n'+F_K);
+  sh.fragmentShader=f.replace('#include <emissivemap_fragment>',F_G)};
+ const isMens=m=>!!m.map&&/(body|head|opacity)( \(binnen\))?$/.test(m.name||'');
+ // welk doek, welke maat (herhalingen per meter langs en dwars) en hoe sterk, per materiaal
+ const K=F.kwast,P=F.planken,T=F.toetsen;
+ const keuze=m=>{const n=m.name||'';
+  if(m===mat.houtDek||n==='steigerhout'||n==='pontonhout')return [P,1/2.4,1/2.4,.95];
+  if(m===mat.houtLicht)return [P,1/1.6,1/1.6,.8];
+  if(m===mat.rood||m===blauwD)return [K,1/9,1/4,.5];
+  if(m===mat.wit||m===witD)return [K,1/6,1/2.6,.2];
+  if(m===mat.gras)return [T,1/16,1/16,1];
+  if(m===mat.beton||m===mat.asfalt)return [K,1/5,1/3,.3];
+  if(/blad|haag|riet|struik|plant|lavendel|siergras|gras/i.test(n))return [T,1/2.2,1/2.2,.4];
+  if(/baksteen|gevel/i.test(n))return [T,1/6,1/6,.3];
+  if(/wandhout|plafondhout|vloerhout/.test(n))return [P,1/2.4,1/2.4,.6];
+  if(/teak|eik|hout|thonet|lambris|rotan|toonbank/i.test(n)||m===mat.houtDonker)return [K,1/1.3,1/.5,.34];
+  if(isMens(m))return [K,1,1,0];
+  return [K,1/3,1/1.5,.2]};
+ const oer=THREE.Material.prototype.onBeforeCompile,overslaan=/glas|raam|lamp|opaal|water|vlam|gloei|inkt/i;
+ F.schilder=()=>{let n=0;const gezien=new Set();scene.traverse(o=>{if(!o.isMesh)return;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{
+  if(!m||gezien.has(m))return;gezien.add(m);if(!m.isMeshStandardMaterial||m.userData.fable)return;
+  if(m===mat.glas||m===mat.raam||m===mat.lamp||m===glasH||(m.transparent&&m.opacity<.9&&!m.map)||overslaan.test(m.name||''))return;
+  m.userData.fable=keuze(m);n++;
+  if(isMens(m)){m.roughness=1;m.envMapIntensity=.15;m.onBeforeCompile=function mensGetekend(sh){zet(sh,m,true)};m.customProgramCacheKey=()=>'fable-mens'}
+  else{const oud=m.onBeforeCompile;
+   if(oud&&oud!==oer){const sleutel='fable+'+oud.toString();m.onBeforeCompile=function(sh,r){oud.call(m,sh,r);zet(sh,m,false)};m.customProgramCacheKey=()=>sleutel}
+   else{m.onBeforeCompile=function geschilderd(sh){zet(sh,m,false)};m.customProgramCacheKey=()=>'fable-verf'}}
+  m.needsUpdate=true})});return n};
+ // --- kleuren en losse ingrepen vóór het schilderen ---
+ // dek: warm oranje teak; de oude korreltexturen (ruis) gaan eruit
+ mat.houtDek.map=null;mat.houtDek.color.set(0xa84c1c);mat.houtDek.roughness=.9;
+ mat.houtLicht.map=null;mat.houtLicht.color.set(0xd29a5c);
+ mat.gras.map=null;mat.gras.bumpMap=null;mat.beton.map=null;mat.asfalt.map=null;
+ mat.wit.color.set(0xf1e9d8);witD.color.set(0xf1e9d8);
+ mat.gras.color.set(0x73823f);
+ mat.rood.color.set(0x15306f);blauwD.color.set(0x15306f);
+ // steigers en loopplanken (buiten de boot) krijgen eigen, bruiner hout; het ponton van het loketplein ook
+ {const st=mat.houtDek.clone();st.name='steigerhout';st.color.set(0x8c5a3a);st.userData={};
+  scene.traverse(o=>{if(o.isMesh&&o.material===mat.houtDek){let a=o,inPont=false;while(a){if(a===pont){inPont=true;break}a=a.parent}if(!inPont)o.material=st}});
+  const po=mat.houtDek.clone();po.name='pontonhout';po.color.set(0x8a5630);po.userData={};BOOT.Loketplein.g.traverse(o=>{if(o.isMesh&&o.material===mat.houtDek)o.material=po})}
+ // --- interieur: warm hout in plaats van witte wanden (bakkerij en café), zoals in de productie-still ---
+ {const hout=(k,n)=>{const m=new THREE.MeshStandardMaterial({color:k,roughness:.85,metalness:0,envMapIntensity:.3});m.name=n;return m};
+  const wandhout=hout(0x8e4f25,'wandhout'),bakhout=hout(0xa8662e,'bakkerijhout');F.wandhout=wandhout;
+  BOOT.Productie.g.traverse(o=>{if(!o.isMesh||o.material!==mat.wit)return;const p=o.geometry.parameters;if(p&&p.depth>8&&p.width<.25&&p.height>2)return;  // de voorwand van de kajuit blijft wit (ook buiten zichtbaar)
+   let a=o,wand=false;while(a&&a!==pont){if(a.name==='Wanden')wand=true;a=a.parent}o.material=wand?wandhout:bakhout});
+  deel('Horeca','Wandbekleding').traverse(o=>{if(o.isMesh&&o.material===creme)o.material=wandhout});
+  box(.03,2.6,8.3,wandhout,-12.385,2.44,0,deel('Productie','Wanden'));                                   // houten binnenzijde van de voorwand
+  tegel.color.set(0x80502c);tegel.name='vloer bakkerij';creme.color.set(0xd9b27c);
+  // broodkast aan het tweede etalageraam (steigerkant), zoals het grote rek met broden in de productie-still
+  {const B=deel('Productie','Broodkast'),korst=[];scene.traverse(o=>{if(o.isMesh&&/^broodkorst/.test(o.material.name||'')&&!korst.includes(o.material))korst.push(o.material)});
+   const x0=-5.95,z0=3.93,br=1.3;box(br,2.2,.04,wandhout,x0,2.26,z0-.13,B);for(const sx of [-1,1])box(.05,2.2,.3,wandhout,x0+sx*br/2,2.26,z0,B);box(br+.1,.06,.34,wandhout,x0,3.38,z0,B);
+   const bol=new THREE.SphereGeometry(.1,8,6);let k=0;
+   for(let r=0;r<5;r++){const y=1.5+r*.38;box(br-.04,.03,.28,bakhout,x0,y,z0,B);
+    if(korst.length)for(let i=0;i<6;i++){const b=new THREE.Mesh(bol,korst[(k++*7+r)%korst.length]);b.position.set(x0-br/2+.14+i*.205,y+.085,z0+.03);b.scale.set(.95,.7,1.25);b.castShadow=true;B.add(b)}}}
+  // etalageglas: helder, zonder waas (je kijkt de bakkerij in)
+  glasH.opacity=.07;glasH.metalness=0;glasH.envMapIntensity=.25;glasH.color.set(0xfff4e0);glasH.needsUpdate=true}
+ F.aantal=F.schilder();
+ // --- per stand ---
+ F.stand=n=>{F.uGloed.value=n?.14:.42};   // 's avonds doen de lampen het werk, overdag de gloed
+ setTimeout(()=>{const s=setNight;setNight=function(n){s(n);F.stand(n)};F.stand(false)},0);
+ return F})();
 
 // ===== OPBOUW: namen voor materialen en vormen, paneel "Opbouw" en klikken op de boot =====
 {const MN={rood:'pontblauw'};for(const k in mat)if(mat[k]&&mat[k].isMaterial&&!mat[k].name)mat[k].name=MN[k]||k;
