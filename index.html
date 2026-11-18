@@ -34,6 +34,10 @@ h1{margin:0;
 #laden{position:absolute;inset:0;z-index:3;display:grid;place-items:center;font:700 16px Inter,system-ui,sans-serif;color:var(--blauw);background:#cfe3df;transition:opacity .6s}
 #laden.weg{opacity:0;pointer-events:none}
 #fout{position:absolute;inset:0;display:none;place-items:center;padding:24px;text-align:center;font:15px system-ui,sans-serif}
+#still{position:absolute;inset:0;z-index:1;background:transparent center/cover no-repeat;opacity:0;transition:opacity 1.4s ease;pointer-events:none}
+#still.aan{opacity:1}
+#stilltip{position:absolute;z-index:2;left:50%;bottom:calc(max(12px,env(safe-area-inset-bottom)) + 52px);transform:translateX(-50%);max-width:calc(100% - 32px);font:600 12px/1.3 Inter,system-ui,sans-serif;letter-spacing:.04em;color:var(--creme);background:rgba(22,33,58,.55);padding:7px 12px;border-radius:999px;opacity:0;transition:opacity 1s ease .4s;pointer-events:none;text-align:center}
+#stilltip.aan{opacity:1}
 </style>
 </head>
 <body>
@@ -50,6 +54,7 @@ h1{margin:0;
 <script src="js/three-extra.js"></script>
 <script src="mensen/mensen-data.js"></script>
 <script src="js/scene.js"></script>
+<script src="js/stills.js"></script>
 <script>
 // laadscherm weg zodra de scène er is; werkknoppen (Opbouw, Schoon beeld) verbergen; Avond-knop achteraan
 (function(){const v=document.getElementById('views');

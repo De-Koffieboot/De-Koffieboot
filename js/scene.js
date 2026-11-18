@@ -1482,7 +1482,7 @@ const opbouw=(()=>{
  return {BOOT,kies};
 })();
 {const sn=setNight;setNight=function(n){sn(n);binnen.forEach(l=>l.intensity=n?1.5:.55);opaal.emissiveIntensity=n?1.8:.25}}
-window.koffieboot={pont,BOOT,kies:opbouw.kies,goal};
+window.koffieboot={pont,BOOT,kies:opbouw.kies,goal,camera,scene,renderer,gevels};
 function place(){const s=Math.sin(view.ph),x=view.r*s*Math.sin(view.th),y=view.r*Math.cos(view.ph),z=-view.r*s*Math.cos(view.th);camera.position.set(view.t.x+x,view.t.y+y,view.t.z+z);camera.lookAt(view.t)}
 function go(n){const v=VIEWS[n];goal.t.set(...v.t);goal.r=v.r;goal.th=v.th;goal.ph=v.ph;document.querySelectorAll('#views button').forEach(b=>b.classList.toggle('on',b.textContent===n))}
 const vb=document.getElementById('views');Object.keys(VIEWS).forEach(n=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.onclick=()=>go(n);vb.appendChild(b)});
