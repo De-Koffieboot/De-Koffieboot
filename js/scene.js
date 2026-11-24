@@ -68,7 +68,7 @@ function golfNormals(){const N=256,c=document.createElement('canvas');c.width=c.
  for(let y=0;y<N;y++)for(let x=0;x<N;x++){let dx=0,dy=0;for(const w of W){const cz=Math.cos(6.2832*(w[0]*x+w[1]*y)/N+w[2])*w[3];dx+=cz*w[0];dy+=cz*w[1]}
   const nx=-dx*.15,ny=-dy*.15,l=Math.hypot(nx,ny,1),i=(y*N+x)*4;im.data[i]=(nx/l*.5+.5)*255;im.data[i+1]=(ny/l*.5+.5)*255;im.data[i+2]=(1/l*.5+.5)*255;im.data[i+3]=255}
  g.putImageData(im,0,0);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t}
-const water=new THREE.Water(new THREE.PlaneGeometry(900,340),{textureWidth:768,textureHeight:768,waterNormals:golfNormals(),sunDirection:zonDir(.24),sunColor:0xffb878,waterColor:0x3a5258,distortionScale:.55,fog:true});
+const water=new THREE.Water(new THREE.PlaneGeometry(900,340),{textureWidth:matchMedia('(pointer:coarse)').matches?512:768,textureHeight:matchMedia('(pointer:coarse)').matches?512:768,waterNormals:golfNormals(),sunDirection:zonDir(.24),sunColor:0xffb878,waterColor:0x3a5258,distortionScale:.55,fog:true});
 water.material.uniforms.size.value=30;water.rotation.x=-Math.PI/2;water.position.set(0,0,95);water.receiveShadow=true;scene.add(water);
 // hemel als reflectiebron voor glas, staal en lak
 const pmrem=new THREE.PMREMGenerator(renderer),envScene=new THREE.Scene();envScene.add(new THREE.Mesh(lucht.geometry,lucht.material));
@@ -618,15 +618,33 @@ const VIEWS={
  V('Buurtloket',[-17.5,2.2,0],[-29,5,8]);V('Productie',[-8.75,2.4,0],[-5.5,3.4,12.5]);V('Zijaanzicht',[-4,3.6,0],[-4,4.4,-31]);V('Klep',[-19,1.5,0],[-27.5,7.5,-6]);V('Binnen',[-1.5,1.9,-.4],[9.3,2.25,.35]);V('Salon',[10.4,4.9,.6],[5.5,5.9,-2.1])}
 // Rocketbox-avatars: Microsoft Rocketbox Avatar Library, MIT-licentie (github.com/microsoft/Microsoft-Rocketbox)
 // ===== MENSEN (Rocketbox, MIT): vooraf geposeerd en bevroren; hier alleen uitpakken en neerzetten =====
-const MENS=(()=>{const bin=Uint8Array.from(atob(MENS_BIN),c=>c.charCodeAt(0)).buffer,TL=new THREE.TextureLoader(),tex={},mats={},geos={};
+const MENS=(()=>{let bin=null;const TL=new THREE.TextureLoader(),tex={},mats={},geos={};
  const T=(n,s)=>{if(!MENS_TEX[n])return null;if(!tex[n]){const t=TL.load(MENS_TEX[n]);t.encoding=THREE.sRGBEncoding;t.flipY=true;tex[n]=t}return tex[n]};
  function mat(naam,deel){const k=naam+'/'+deel;if(mats[k])return mats[k];let m;
   if(deel==='opacity'){const t=T(naam+'/opacity_color');m=new THREE.MeshStandardMaterial({map:t,alphaTest:.4,transparent:false,side:THREE.DoubleSide,roughness:.85})}
   else m=new THREE.MeshStandardMaterial({map:T(naam+'/'+deel+'_color'),roughness:deel==='head'?.6:.8});
   m.name=naam+' '+deel;return mats[k]=m}
  const deq=(o,n,cnt,mn,mx)=>{const q=new Uint16Array(bin,o,cnt*n),f=new Float32Array(cnt*n);for(let i=0;i<f.length;i++){const k=i%n;f[i]=mn[k]+q[i]/65535*(mx[k]-mn[k])}return f};
- for(const h of MENS_HDR){geos[h.naam+'/'+h.pose]=h.delen.map(d=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(deq(d.p[0],3,d.n,d.p[1],d.p[2]),3));
-  g.setAttribute('uv',new THREE.BufferAttribute(deq(d.u[0],2,d.n,d.u[1],d.u[2]),2));g.setIndex(new THREE.BufferAttribute(d.i32?new Uint32Array(bin,d.i,d.ni):new Uint16Array(bin,d.i,d.ni),1));g.computeVertexNormals();g.computeBoundingSphere();return {g,deel:d.mat}})}
+ // v0.41: de vormen staan eerst leeg klaar (zelfde objecten, dus kopieën en materiaalwissels werken gewoon); MENS_LAAD vult ze zodra de data er is
+ for(const h of MENS_HDR){geos[h.naam+'/'+h.pose]=h.delen.map(d=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(3),3));g.setDrawRange(0,0);return {g,d,deel:d.mat}})}
+ const vul=b=>{bin=b;for(const h of MENS_HDR)for(const x of geos[h.naam+'/'+h.pose]){const g=x.g,d=x.d;
+  g.setAttribute('position',new THREE.BufferAttribute(deq(d.p[0],3,d.n,d.p[1],d.p[2]),3));g.setAttribute('uv',new THREE.BufferAttribute(deq(d.u[0],2,d.n,d.u[1],d.u[2]),2));
+  g.setIndex(new THREE.BufferAttribute(d.i32?new Uint32Array(bin,d.i,d.ni):new Uint16Array(bin,d.i,d.ni),1));g.setDrawRange(0,Infinity);g.computeVertexNormals();g.computeBoundingSphere()}};
+ function MENS_LAAD(){const t0=performance.now();
+  const klaar=()=>{const K=window.koffieboot;if(K){K.mensenKlaar=true;K.mensenMs=Math.round(performance.now());K.wek&&K.wek(1500)}};
+  if(typeof MENS_BIN==='string'){setTimeout(()=>{vul(Uint8Array.from(atob(MENS_BIN),c=>c.charCodeAt(0)).buffer);klaar()},60);return}
+  // website: los binair bestand, met een klein voortgangslabel
+  const lab=document.createElement('div');lab.setAttribute('aria-live','polite');
+  lab.style.cssText='position:fixed;right:14px;bottom:14px;z-index:30;padding:6px 11px;border-radius:999px;background:rgba(14,37,71,.82);color:#f6efe2;font:500 12px/1.2 system-ui,sans-serif;letter-spacing:.02em;pointer-events:none;transition:opacity .6s';
+  lab.textContent='Mensen stappen aan boord…';document.body.appendChild(lab);
+  const weg=()=>{lab.style.opacity='0';setTimeout(()=>lab.remove(),700)};
+  const gz=typeof MENS_GZ!=='undefined'&&'DecompressionStream' in window;
+  fetch(gz?MENS_GZ:MENS_URL).then(async r=>{if(!r.ok)throw new Error('mensen '+r.status);const tot=+r.headers.get('content-length')||(gz?MENS_GZ_BYTES:MENS_BYTES)||0;
+   if(!r.body||!r.body.getReader)return r.arrayBuffer();const rd=r.body.getReader(),delen=[];let n=0;
+   for(;;){const {done,value}=await rd.read();if(done)break;delen.push(value);n+=value.length;if(tot)lab.textContent='Mensen stappen aan boord… '+Math.min(99,Math.round(n/tot*100))+'%'}
+   const u=new Uint8Array(n);let o=0;for(const d of delen){u.set(d,o);o+=d.length}return u.buffer})
+  .then(b=>{const u=new Uint8Array(b);return u[0]===0x1f&&u[1]===0x8b&&'DecompressionStream' in window?new Response(new Blob([b]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer():b})
+  .then(b=>{vul(b);klaar();weg()}).catch(e=>{console.warn('[koffieboot] mensen niet geladen',e);lab.textContent='Mensen konden niet laden';setTimeout(weg,3000)})}
  const schaduw=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d'),r=x.createRadialGradient(32,32,2,32,32,30);r.addColorStop(0,'rgba(0,0,0,.45)');r.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=r;x.fillRect(0,0,64,64);
   return new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false})})(),sg=new THREE.PlaneGeometry(.75,.75);sg.rotateX(-Math.PI/2);
  // zet een mens neer: naam (avatar), pose, plek [x,y,z], draaiing, ouder-groep
@@ -634,7 +652,7 @@ const MENS=(()=>{const bin=Uint8Array.from(atob(MENS_BIN),c=>c.charCodeAt(0)).bu
   for(const {g:geo,deel} of G){const m=new THREE.Mesh(geo,mat(naam,deel));m.castShadow=true;m.name=deel;g.add(m)}
   if(pose!=='zitten'){const s=new THREE.Mesh(sg,schaduw);s.position.y=.012;s.renderOrder=1;g.add(s)}
   ouder.add(g);return g}
- return {zet}})();
+ MENS_LAAD();return {zet}})();
 const mensenBuiten=new THREE.Group();mensenBuiten.name='Mensen buiten';zuid.add(mensenBuiten);
 [
 ["Female_Adult_01", "zitten", [0.55, 1.12, -3.75], 0, deel('Mensen','Horeca')],
@@ -1491,7 +1509,9 @@ const FABLE=(()=>{
  for(let x=-270;x<=270;x+=26+rnd()*20)boom2(scene,x,124.5,.9+rnd()*.3,'wilg');
  for(let x=-290;x<=290;x+=2.2+rnd()*2.5){const r=.6+rnd()*.7;blad2(scene,rnd()*5|0,x,1.3+r*.4,123+rnd()*1.6,r*1.3,r*.8,r)}
  // kade: platanen op de oude plekken
- [[-70,-14,1],[-30,-16,1.1],[22,-13,1.2],[55,-15,1],[-120,-18,1.3],[-48,-12,.8],[-86,-15,.9],[-12,-20,.85],[14,-21,.8],[36,-12,.9],[78,-14,1],[-100,-12,.8],[-140,-14,1.1],[100,-16,1]].forEach(([x,z,s],i)=>boom2(x>=0?noord:zuid,x,z,s*.9,i%5===3?'populier':'plataan'));
+ // de boom op [-48,-12] stond voor het loket (Kai, 24 nov): hij wordt nog wel 'gegroeid' maar in een losse groep die niet in de scène hangt, zodat de rest van de omgeving precies gelijk blijft
+ const wegBoom=new THREE.Group();
+ [[-70,-14,1],[-30,-16,1.1],[22,-13,1.2],[55,-15,1],[-120,-18,1.3],[-48,-12,.8],[-86,-15,.9],[-12,-20,.85],[14,-21,.8],[36,-12,.9],[78,-14,1],[-100,-12,.8],[-140,-14,1.1],[100,-16,1]].forEach(([x,z,s],i)=>boom2(x===-48&&z===-12?wegBoom:x>=0?noord:zuid,x,z,s*.9,i%5===3?'populier':'plataan'));
 
  // ---------- 3. woonarken: vijf Amsterdamse soorten ----------
  const Zb=118.4,y0=.55,bakM=verf(0xc29a55,{roughness:.9}),witK=verf(0xf3e4b8,{roughness:.6}),zwartK=verf(0x1d1d1f,{roughness:.6}),raamM=M(0xffffff,{roughness:.6,metalness:0,envMapIntensity:.3,map:T_RAAM,emissive:0xffc48a,emissiveMap:T_RAAM,emissiveIntensity:.12}),_rn=(raamM.name='arkraam'),
@@ -1865,6 +1885,19 @@ canvas.addEventListener('pointermove',e=>{
 canvas.addEventListener('wheel',e=>{e.preventDefault();goal.r=Math.min(160,Math.max(6,goal.r*(1+e.deltaY*.001)))},{passive:false});
 function size(){const w=wrap.clientWidth,h=wrap.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();if(composer){composer.setSize(w,h);const p=renderer.getPixelRatio();grade.uniforms.res.value.set(w*p,h*p)}}
 new ResizeObserver(size).observe(wrap);size();
+// ===== SNELHEID 1 (v0.41): gelijke materialen delen, zodat het samenvoegen hierna meer stukken per materiaal kan bundelen =====
+// Alleen materialen die later niet veranderen: geen gloed, geen doorzichtigheid, geen ramen/lampen/glas/mensen.
+(function delen(){
+ const nee=/glas|raam|lamp|opaal|water|vlam|gloei|inkt|body|head|opacity|scherm|neon|kaars/i,uid=t=>t?t.uuid:'',per=new Map();let n=0;
+ const sig=m=>{const f=m.userData.fable;return [m.type,m.name,m.color.getHex(),m.roughness,m.metalness,uid(m.map),uid(m.normalMap),uid(m.roughnessMap),uid(m.metalnessMap),uid(m.aoMap),uid(m.bumpMap),uid(m.envMap),
+  m.envMapIntensity,m.side,m.flatShading,m.vertexColors,m.alphaTest,m.depthWrite,m.depthTest,m.polygonOffset,m.polygonOffsetFactor,m.polygonOffsetUnits,m.fog,m.toneMapped,m.wireframe,m.opacity,
+  m.customProgramCacheKey(),f?[uid(f[0]),f[1],f[2],f[3]].join(','):'',Object.keys(m.userData).sort().join(',')].join('|')};
+ scene.traverse(o=>{if(!o.isMesh||o.isInstancedMesh||Array.isArray(o.material))return;const m=o.material;
+  if(!m||!m.isMeshStandardMaterial||m.isMeshPhysicalMaterial||m.transparent||m.emissiveMap||m.emissive.getHex()!==0||nee.test(m.name||''))return;
+  let a=o;while(a){if(a.userData&&a.userData.soort==='persoon')return;a=a.parent}
+  const k=sig(m),b=per.get(k);if(!b){per.set(k,m);return}if(b!==m){o.material=b;n++}});
+ window.__gedeeld=n})();
+
 // ===== SNELHEID: vaste onderdelen per materiaal samenvoegen (per onderdeel van de boot, omgeving per materiaal) =====
 // Klikken blijft werken: elk samengevoegd stuk hangt nog onder zijn eigen onderdeel. Bewegende fietsers, mensen (los aanklikbaar), water en lucht blijven los.
 (function samenvoegen(){
@@ -1894,10 +1927,81 @@ new ResizeObserver(size).observe(wrap);size();
  // lege groepjes zonder inhoud opruimen (maar nooit de benoemde groepen en onderdelen)
  const leeg=[];scene.traverse(o=>{if(o.type==='Group'&&!o.children.length&&!o.userData.niveau&&o!==pont&&!uit.has(o))leeg.push(o)});leeg.forEach(o=>o.parent&&o.parent.remove(o));
  scene.updateMatrixWorld(true);window.koffieboot&&(window.koffieboot.samengevoegd={voor,na})})();
+// ===== SNELHEID 2 (v0.41): minder tekenwerk per beeld, rust als er niets beweegt, korte overgang naar binnen =====
+const SNEL=(()=>{
+ const S={n:0,laatst:0,wakkerTot:0,zichtbaar:true,vuil:true,rustig:matchMedia('(prefers-reduced-motion:reduce)').matches};
+ const IN=new THREE.Vector3(),binnen=(p,m)=>{IN.copy(p);pont.worldToLocal(IN);const q=IN;m=m||0;
+  return (Math.abs(q.x)<12.39-m&&Math.abs(q.z)<4.195-m&&q.y>1.02+m&&q.y<3.77-m)||(Math.abs(q.x-8)<2.96-m&&Math.abs(q.z)<2.72-m&&q.y>4.05+m&&q.y<6.58-m)||(Math.abs(q.x+14)<1.46-m&&Math.abs(q.z)<3.36-m&&q.y>1.02+m&&q.y<3.42-m)};
+ S.binnen=binnen;
+ // 0) bomen, planten en andere herhaalde stukken (instanced) per materiaal tot één vorm samenvoegen: zelfde beeld, veel minder tekenopdrachten
+ {const bak=new Map(),M=new THREE.Matrix4(),N=new THREE.Matrix3(),v=new THREE.Vector3();let voor=0;
+  scene.traverse(o=>{if(!o.isInstancedMesh||!o.visible||o.instanceColor||Array.isArray(o.material)||!o.parent)return;let a=o;while(a){if(!a.visible)return;a=a.parent}
+   const g=o.geometry;if(!g.attributes.normal||g.morphAttributes&&Object.keys(g.morphAttributes).length)return;
+   const at=Object.keys(g.attributes).filter(k=>['position','normal','uv'].includes(k)).sort().join(',');
+   let h=o.parent;while(h&&h!==scene&&!(h.userData&&h.userData.niveau))h=h.parent;h=h||scene;
+   const key=h.uuid+'|'+o.material.uuid+'|'+at+'|'+o.castShadow+o.receiveShadow+'|'+o.renderOrder;
+   if(!bak.has(key))bak.set(key,{p:h,m:o.material,at:at.split(','),l:[],cs:o.castShadow,rs:o.receiveShadow,ro:o.renderOrder,naam:o.name});bak.get(key).l.push(o);voor++});
+  let na=0;for(const b of bak.values()){let nv=0,ni=0;for(const o of b.l){const g=o.geometry;nv+=g.attributes.position.count*o.count;ni+=(g.index?g.index.count:g.attributes.position.count)*o.count}
+   const A={};for(const k of b.at)A[k]=new Float32Array(nv*b.l[0].geometry.attributes[k].itemSize);const I=nv>65535?new Uint32Array(ni):new Uint16Array(ni);let ov=0,oi=0;
+   const inv=new THREE.Matrix4().copy(b.p.matrixWorld).invert();for(const o of b.l){const W=new THREE.Matrix4().multiplyMatrices(inv,o.matrixWorld);const g=o.geometry,P=g.attributes.position,n=P.count,idx=g.index;
+    for(let i=0;i<o.count;i++){o.getMatrixAt(i,M);M.premultiply(W);N.getNormalMatrix(M);
+     for(let j=0;j<n;j++){v.fromBufferAttribute(P,j).applyMatrix4(M);A.position.set([v.x,v.y,v.z],(ov+j)*3);
+      v.fromBufferAttribute(g.attributes.normal,j).applyMatrix3(N).normalize();A.normal.set([v.x,v.y,v.z],(ov+j)*3);
+      if(A.uv)A.uv.set([g.attributes.uv.getX(j),g.attributes.uv.getY(j)],(ov+j)*2)}
+     if(idx){for(let j=0;j<idx.count;j++)I[oi+j]=idx.getX(j)+ov;oi+=idx.count}else{for(let j=0;j<n;j++)I[oi+j]=ov+j;oi+=n}
+     ov+=n}}
+   const G=new THREE.BufferGeometry();for(const k of b.at)G.setAttribute(k,new THREE.BufferAttribute(A[k],k==='uv'?2:3));G.setIndex(new THREE.BufferAttribute(I,1));G.computeBoundingSphere();G.computeBoundingBox();
+   const me=new THREE.Mesh(G,b.m);me.name=b.naam||'gebundeld';me.castShadow=b.cs;me.receiveShadow=b.rs;me.renderOrder=b.ro;me.userData.gebundeld=b.l.length;b.p.add(me);na++;
+   for(const o of b.l)o.parent.remove(o)}
+  S.gebundeld={voor,na}}
+ // 1) waterspiegel: hele kleine dingen (kopjes, flesjes, bestek) worden niet gespiegeld (laag 1 = alleen het gewone beeld); binnen blijft zichtbaar door de ramen
+ scene.updateMatrixWorld(true);camera.layers.enable(1);
+ for(const f of ['setFromCamera','set']){const o=THREE.Raycaster.prototype[f];THREE.Raycaster.prototype[f]=function(){this.layers.enableAll();return o.apply(this,arguments)}}
+ const bol=new THREE.Sphere(),pos=new THREE.Vector3();let spiegelUit=0;
+ scene.traverse(o=>{
+  if(o.userData&&o.userData.soort==='persoon')return;
+  if(!o.isMesh||o.isInstancedMesh||o===water||o.layers.mask!==1)return;let a=o.parent;while(a){if(a.userData&&a.userData.soort==='persoon')return;a=a.parent}
+  const g=o.geometry;if(!g||!g.attributes.position)return;if(!g.boundingSphere)g.computeBoundingSphere();bol.copy(g.boundingSphere).applyMatrix4(o.matrixWorld);
+  if(bol.radius<.18){o.layers.set(1);spiegelUit++;return}
+  });
+ S.spiegelUit=spiegelUit;
+ // 1b) de waterspiegel alleen opnieuw tekenen als de camera beweegt of er iets verandert (de golven blijven gewoon bewegen)
+ {const wob=water.onBeforeRender,lp=new THREE.Vector3(),lq=new THREE.Quaternion();let teller=0;
+  water.onBeforeRender=function(r,sc,c){const anders=!lp.equals(c.position)||!lq.equals(c.quaternion);teller++;
+   if(c===camera&&!anders&&!S.spiegelVuil&&teller%6!==0)return;lp.copy(c.position);lq.copy(c.quaternion);S.spiegelVuil=false;return wob.call(this,r,sc,c)}}
+ // 2) schaduw van de zon: niet elk beeld opnieuw (de zon staat stil), wel na elke verandering
+ renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;
+ const SCHADUW_ELKE=TELEFOON?4:3;
+ // 3) lampen die op 0 staan tellen niet mee in de berekening (scheelt rekenwerk per pixel); gaan ze aan, dan doen ze weer mee
+ const lampen=[];scene.traverse(o=>{if(o.isPointLight||o.isSpotLight)lampen.push(o)});
+ const lampCheck=()=>{let veranderd=false;for(const l of lampen){if(l.visible&&l.intensity<=1e-4){l.visible=false;l.userData.snelUit=true;veranderd=true}else if(l.userData.snelUit&&l.intensity>1e-4){l.visible=true;l.userData.snelUit=false;veranderd=true}}if(veranderd){S.vuil=true;S.spiegelVuil=true;renderer.shadowMap.needsUpdate=true}};
+ // 4) wakker houden bij invoer; daarna rustig tempo (water en fietsers blijven bewegen), stil bij verborgen tabblad of als de scène uit beeld is
+ S.wek=(ms)=>{S.wakkerTot=Math.max(S.wakkerTot,performance.now()+(ms||2500));S.vuil=true;S.spiegelVuil=true;renderer.shadowMap.needsUpdate=true};
+ for(const e of ['pointerdown','wheel','keydown','touchstart','click'])addEventListener(e,()=>S.wek(),{passive:true,capture:true});
+ addEventListener('pointermove',e=>{if(e.buttons)S.wek()},{passive:true});addEventListener('resize',()=>S.wek());
+ document.addEventListener('visibilitychange',()=>{S.zichtbaar=!document.hidden;if(S.zichtbaar)S.wek()});
+ if('IntersectionObserver' in window)new IntersectionObserver(es=>{const v=es[es.length-1].isIntersecting;S.inBeeld=v;if(v)S.wek()}).observe(renderer.domElement);S.inBeeld=true;
+ const RUST=1000/(TELEFOON?20:24),ACTIEF=1000/61;
+ S.beweegt=()=>view.t.distanceToSquared(goal.t)>1e-6||Math.abs(view.r-goal.r)>1e-3*goal.r||Math.abs(view.th-goal.th)>1e-4||Math.abs(view.ph-goal.ph)>1e-4;
+ S.teken=nu=>{lampCheck();if(!S.zichtbaar||!S.inBeeld)return false;
+  const actief=S.vuil||nu<S.wakkerTot||S.beweegt();
+  if(S.rustig&&!actief)return false;
+  if(nu-S.laatst<(actief?ACTIEF:RUST)-1)return false;
+  S.laatst=nu;S.vuil=false;S.n++;if(S.n%SCHADUW_ELKE===0)renderer.shadowMap.needsUpdate=true;return true};
+ // 5) camera van buiten naar binnen (of terug): niet door de wand vliegen maar kort vervagen en er direct zijn
+ const doel=new THREE.Vector3(),nu=new THREE.Vector3(),pl=(v,o)=>{const s=Math.sin(v.ph);o.set(v.t.x+v.r*s*Math.sin(v.th),v.t.y+v.r*Math.cos(v.ph),v.t.z-v.r*s*Math.cos(v.th));return o};
+ let vervaagt=0;const cv=renderer.domElement;
+ S.voor=()=>{if(vervaagt||!S.beweegt())return;pl(goal,doel);pl(view,nu);if(nu.distanceTo(doel)<1.5)return;
+  if(binnen(doel,.05)===binnen(nu,.05)&&!(binnen(doel,.05)&&nu.distanceTo(doel)>3))return;
+  vervaagt=1;cv.style.transition='opacity .16s ease-in';cv.style.opacity='0';
+  setTimeout(()=>{view.t.copy(goal.t);view.r=goal.r;view.th=goal.th;view.ph=goal.ph;S.wek();
+   requestAnimationFrame(()=>requestAnimationFrame(()=>{cv.style.transition='opacity .32s ease-out';cv.style.opacity='1';vervaagt=0}))},170)};
+ window.koffieboot&&Object.assign(window.koffieboot,{wek:S.wek,snel:S,mensenLaden:true});
+ return S})();
 const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-function tick(){const k=calm?1:1-Math.pow(.91,Math.min(6,(performance.now()-(tick.t||performance.now()))/16.667));/* even snel bij 60 en 120 Hz */view.t.lerp(goal.t,k);view.r+=(goal.r-view.r)*k;view.th+=(goal.th-view.th)*k;view.ph+=(goal.ph-view.ph)*k;place();
- const nu=performance.now();const dt=Math.min(.1,(nu-(tick.t||nu))/1000);tick.t=nu;
+function tick(){const nu=performance.now();const dt=Math.min(.1,(nu-(tick.t||nu))/1000);tick.t=nu;SNEL.voor();
+ const k=calm?1:1-Math.pow(.91,dt*60);view.t.lerp(goal.t,k);view.r+=(goal.r-view.r)*k;view.th+=(goal.th-view.th)*k;view.ph+=(goal.ph-view.ph)*k;place();
  if(!calm)fiets.forEach(f=>{f.g.position.x+=f.dir*f.sp*dt;if(f.g.position.x>f.lim[1]||f.g.position.x<f.lim[0])f.g.position.x=f.dir>0?f.lim[0]:f.lim[1]});
- if(!calm)water.material.uniforms.time.value+=dt*.55;if(composer){grade.uniforms.time.value=(nu%1000)/1000;composer.render()}else renderer.render(scene,camera);requestAnimationFrame(tick)}
+ if(!calm)water.material.uniforms.time.value+=dt*.55;if(SNEL.teken(nu)){if(composer){grade.uniforms.time.value=(nu%1000)/1000;composer.render()}else renderer.render(scene,camera)}requestAnimationFrame(tick)}
 place();tick();
 })();
