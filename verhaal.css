@@ -97,7 +97,6 @@
 #hoofdstukken button:hover .naam,#hoofdstukken button.on .naam{max-width:240px;opacity:1}
 #hoofdstukken button.on{opacity:1}
 #hoofdstukken button.on .nr{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:4px;background:var(--blauw);box-shadow:0 0 0 1.5px #fff;text-shadow:none;letter-spacing:0}
-#hoofdstukken button:disabled{opacity:.42;cursor:default}
 
 /* Dag/Avond: klein en rustig rechtsonder */
 #views{justify-content:flex-end!important;left:auto!important;right:max(20px,env(safe-area-inset-right))!important;padding:0!important;bottom:max(18px,env(safe-area-inset-bottom))!important;transition:opacity .6s}

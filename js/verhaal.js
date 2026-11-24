@@ -28,92 +28,87 @@
  };
 
  // --- inhoud: hoofdstukken en stappen ---
+ // Zes hoofdstukken die de boot één keer doorlopen. Elk feit staat er één keer in.
  const HOOFDSTUKKEN=[
-  {nr:1,naam:'Een pont voor de buurt',klaar:true,stappen:[
-   {view:'Gouden uur',icoon:'pont',kop:'Een echte pont',tekst:'Een blauw-witte IJ-pont ligt afgemeerd aan de zwemsteiger aan Zijkanaal I, naast de kraan van Het Paard van Noord. Geen nieuwbouw: een Amsterdamse pont die weer een plek voor de buurt wordt.',klein:'Pont 13 (nu Ferry) bewijst dat een veerpont als horeca werkt: een pont uit 1927, sinds 2005 een restaurant.'},
-   {view:'Buurtloket',icoon:'loket',kop:'Voorop: Het Buurtloket',tekst:'Op het voordek haal je boodschappen, brood en koffie. Het loket heeft een eigen lane aan de steigerzijde, zodat je niet door de zittende gasten loopt en toch de reuring voelt.'},
-   {view:'Productie',icoon:'keuken',kop:'In het midden: de keuken achter glas',tekst:'Hier bakken we af en maken we de snacks, zichtbaar voor iedereen op de steiger en aan boord. Ambachtelijk aan de voorkant, efficiënt aan de achterkant.'},
-   {view:'Dakterras',icoon:'blijven',kop:'Achterin en op het dak: blijven',tekst:'Kajuit en terras zijn voor wie zin heeft om te blijven, voor de gezelligheid van de hele boot. Het dak is er soms voor een avond met de buurt.'},
-   {view:'Zijaanzicht',icoon:'pont',kop:'Snel genoeg om te halen, warm genoeg om te blijven',tekst:'Dat is de hele boot in één zin. Hoe dat werkt, lees je in de volgende hoofdstukken.'}
+  {nr:1,id:'pont',naam:'Een pont voor de buurt',stappen:[
+   {view:'Kraan',icoon:'pont',kop:'Een echte pont',tekst:'Aan de zwemsteiger aan Zijkanaal I, naast de kraan van Het Paard van Noord, ligt een blauw-witte IJ-pont afgemeerd. Geen nieuwbouw, maar een Amsterdamse pont die een plek voor de buurt wordt.',klein:'Dat een pont horeca kan zijn, bewijst Pont 13 (nu Ferry): een veerpont uit 1927, sinds 2005 een restaurant.'},
+   {view:'Zwemsteiger',icoon:'mensen',kop:'Tussen nieuw en oud Noord',tekst:'De steiger ligt waar nieuw en oud Noord elkaar raken. Een buurtloket met daghoreca wordt de plek waar iedereen elkaar dagelijks tegenkomt.',lijst:[['Buren','boodschappen, koffie, iets voor de lunch'],['Zwemmers','iets halen in de zon en blijven hangen'],['Omfietsers','komen voor dat ene broodje of die ene avond']]},
+   {view:'Boven',icoon:'kraan',kop:'Horeca aan het water',tekst:'In de aanbesteding Horeca aan het water (De Bongerd) zoekt de gemeente horeca bij de zwemsteiger. De Koffieboot is ons antwoord: van voor naar achter een loket, een keuken en een plek om te blijven.'}
   ]},
-  {nr:2,naam:'Waarom hier, waarom nu',klaar:true,stappen:[
-   {view:'Kraan',icoon:'kraan',kop:'Tussen nieuw en oud Noord',tekst:'De steiger ligt waar het nieuwe Noord en het oude Noord elkaar raken. Een buurtloket met daghoreca maakt die verbinding: een plek waar iedereen dagelijks langskomt.'},
-   {view:'Zwemsteiger',icoon:'zwemmen',kop:'Wie hier komt',lijst:[['Buren','dagelijkse boodschappen, koffie, iets voor de lunch'],['Zwemmers','iets halen in de zon en blijven hangen'],['Omfietsers','komen voor dat ene broodje of die ene avond']]},
-   {view:'Buurtloket',icoon:'loket',kop:'Wat het oplost',lijst:[['Geen tijd','snel iets meenemen aan het loket'],['Wachten','eigen loket-lane, vooraf bestellen in een tijdvak'],['Geen buurtgevoel','buurtavonden, lokale makers, herkend worden'],['Zon en water','terras aan het water, kajuit bij slecht weer']]},
-   {view:'Boven',icoon:'pont',kop:'De gemeente vraagt erom',tekst:'In de aanbesteding Horeca aan het water (De Bongerd) zoekt de gemeente horeca bij de zwemsteiger. De Koffieboot geeft daar een antwoord op dat bij de plek hoort.',klein:'Wat de buurt nu precies mist, vullen Kai en Hidde nog aan.'}
+  {nr:2,id:'halen',naam:'Halen: Het Buurtloket',stappen:[
+   {view:'Start',icoon:'loket',kop:'Voorop het loket',tekst:'Op het voordek haal je brood, koffie, boodschappen en broodjes. Het loket heeft een eigen rij aan de steigerkant, zodat je niet tussen de zittende gasten door hoeft. Wie vooraf bestelt, haalt op in een tijdvak.'},
+   {view:'Buurtloket',icoon:'brood',kop:'De beste in hun vak',tekst:'Waar anderen aantoonbaar beter zijn, werken we samen. Divers: traditioneel, en soms vooruitstrevend en hip.',lijst:[['Brood','Westerbos'],['Koffie','een Amsterdamse branderij'],['IJs','een Amsterdamse ijsboer'],['Maaltijden','Mama\'s Koelkast, ook stamppotjes om mee te nemen'],['Beleg','de beste en leukste Amsterdamse makers']]}
   ]},
-  {nr:3,naam:'Het aanbod',klaar:true,stappen:[
-   {view:'Gouden uur',icoon:'brood',kop:'Eén regel voor alles',tekst:'Waar anderen aantoonbaar beter in zijn, pakken we collabs. Waar wij het verschil kunnen maken, doen we het zelf. Alles is divers: traditioneel, en soms vooruitstrevend en hip.'},
-   {view:'Buurtloket',icoon:'loket',kop:'Collabs: de beste in hun vak',lijst:[['Brood','Westerbos, hier afgebakken'],['Koffie','de beste branderij (nog te kiezen)'],['IJs','de beste Amsterdamse ijsboer (nog te kiezen)'],['Maaltijden','Mama\'s Koelkast, ook als afhaalmaaltijd en stamppotje'],['Beleg','de beste en leukste Amsterdamse makers']],klein:'Het loket start met een simpel assortiment. Leukere producten en bijzondere collabs volgen steeds.'},
-   {view:'Productie',icoon:'snack',kop:'Zelf: de snacks',tekst:'Hier duiken we zelf in, om de tofste en uniekste dingen te maken. Ouderwetse klassiekers in een nieuw jasje, zoals het kaneelbroodje dat Wimpie heet. Of nieuwe hits, zoals een half croissantje als hoorntje met ijs erin.'},
-   {view:'Zijaanzicht',icoon:'keuken',kop:'De keuken verbindt alles',tekst:'Alles loopt door de keuken in het midden. Wat je haalt bij het loket, komt daar vandaan. Wat je eet in de kajuit of op het terras ook. Zo is het aanbod één verhaal, van voordek tot terras.'}
+  {nr:3,id:'keuken',naam:'De keuken',stappen:[
+   {view:'Zijaanzicht',icoon:'keuken',kop:'Het hart van de boot',tekst:'In het midden van de boot zit de keuken, achter glas en zichtbaar vanaf de steiger. Hier bakken we het brood af. Alles wat je haalt bij het loket en alles wat je eet aan boord, komt hier vandaan.'},
+   {view:'Productie',icoon:'snack',kop:'Zelf gemaakt: de snacks',tekst:'Waar wij het verschil maken, doen we het zelf. Ouderwetse klassiekers in een nieuw jasje, zoals het kaneelbroodje dat Wimpie heet. Of nieuwe hits, zoals een half croissantje als hoorntje met ijs erin.'}
   ]},
-  {nr:4,naam:'Halen, eten, blijven',klaar:true,stappen:[
-   {view:'Buurtloket',icoon:'loket',kop:'Halen',tekst:'Je loopt of fietst langs het loket aan de steiger en neemt mee wat je nodig hebt: brood, koffie, boodschappen of een broodje. Wie vooraf bestelt, haalt het op in een tijdvak.'},
-   {view:'Zwemsteiger',icoon:'broodje',kop:'Eten',tekst:'Eten doe je waar je wilt: aan het loket, op de steiger in de zon of aan boord. Het is hetzelfde aanbod, op de plek die bij je moment past.'},
-   {view:'Zijaanzicht',icoon:'blijven',kop:'Blijven, als je zin hebt',tekst:'Blijven hoeft niet, maar het mag altijd. In de kajuit (naar schatting 80 tot 90 plekken) en op het terras aan het water, voor de gezelligheid en knusheid van de boot.'},
-   {view:'Gouden uur',icoon:'koffie',kop:'De dag op de boot',lijst:[['Ochtend','koffie en brood halen, koffie op het terras'],['Middag','broodjes en snacks, lunch binnen of buiten'],['Namiddag','snacks worden hapjes, een wijn of pils']],klein:'Van eerste koffie tot laatste glas. We blijven daghoreca.'}
+  {nr:4,id:'blijven',naam:'Eten en blijven',stappen:[
+   {view:'Dakterras',icoon:'broodje',kop:'Eten waar je wilt',tekst:'Aan het loket, op de steiger in de zon of aan boord: hetzelfde aanbod, op de plek die bij je moment past.'},
+   {view:'Gouden uur',icoon:'blijven',kop:'Blijven, als je zin hebt',tekst:'Blijven hoeft niet, maar mag altijd. In de kajuit (naar schatting 80 tot 90 plekken) en op het terras aan het water, voor de gezelligheid van de boot.'},
+   {view:'Zijaanzicht',icoon:'koffie',kop:'Van eerste koffie tot laatste glas',lijst:[['Ochtend','koffie en brood halen, koffie op het terras'],['Middag','broodjes en snacks, lunch binnen of buiten'],['Namiddag','snacks worden hapjes, met een korte kaart van wijn en pils uit de buurt']],klein:'We zijn daghoreca.'}
   ]},
-  {nr:5,naam:'Door het jaar',klaar:true,stappen:[
-   {view:'Zwemsteiger',icoon:'ijs',kop:'Zomer: de zwemsteiger',tekst:'In de zomer draait de boot om de steiger en het terras. IJs van de beste Amsterdamse ijsboer, en uit onze eigen keuken het halve croissantje als hoorntje met ijs erin.'},
-   {view:'Zijaanzicht',icoon:'maaltijd',kop:'Winter: de warme kajuit',tekst:'In de winter wordt de kajuit het warme hart van de boot, en het loket belangrijker. Je neemt een afhaalmaaltijd of stamppotje van Mama\'s Koelkast mee naar huis.'},
-   {view:'Gouden uur',icoon:'brood',kop:'IJscuypje of stamppotje',tekst:'De basis blijft het hele jaar hetzelfde: brood, koffie, broodjes en snacks. De rest van de kaart gaat mee met het seizoen.'}
+  {nr:5,id:'jaar',naam:'Door het jaar',stappen:[
+   {view:'Zwemsteiger',icoon:'ijs',kop:'Zomer',tekst:'In de zomer draait de boot om de zwemsteiger en het terras, met ijs na het zwemmen.'},
+   {view:'Zijaanzicht',icoon:'maaltijd',kop:'Winter',tekst:'In de winter wordt de kajuit het warme hart en neem je een stamppotje mee naar huis. De basis blijft het hele jaar: brood, koffie, broodjes en snacks.'},
+   {view:'Dakterras',avond:true,icoon:'muziek',kop:'Soms: de buurt aan boord',tekst:'Zo nu en dan gooien we de deuren open.',lijst:[['Dak','een artiest, met bootjes in het water eromheen'],['Steiger','een foodfestival met de makers van ons beleg'],['Kajuit','bingo en de grootste quiz van Noord']]}
   ]},
-  {nr:6,naam:'Specials',klaar:true,stappen:[
-   {view:'Dakterras',avond:true,icoon:'muziek',kop:'Een artiest op het dak',tekst:'Zo nu en dan gooien we de deuren open voor de buurt. Een artiest speelt op het dak, met bootjes in het water eromheen, net als op het Grachtenfestival.'},
-   {view:'Zwemsteiger',avond:true,icoon:'broodje',kop:'Foodfestival',tekst:'De steiger wordt een eetfestival met de makers van ons beleg, en broodjes die je vanaf het water haalt.'},
-   {view:'Zijaanzicht',avond:true,icoon:'ster',kop:'Bingo en de grootste quiz',tekst:'In de kajuit: bingo-avonden en de grootste en meeslependste quizzen van Noord.'},
-   {view:'Gouden uur',avond:true,icoon:'blijven',kop:'Hapjes bij de beste wijn en pils',tekst:'Richting de avond worden de snacks hapjes, met een korte kaart van wijn en pils uit de omgeving. De specials zijn bijzondere avonden: we blijven daghoreca.'}
-  ]},
-  {nr:7,naam:'Waarom het werkt',klaar:true,stappen:[
-   {view:'Buurtloket',icoon:'loket',kop:'Het loket kent geen zitplekken',tekst:'Binnen zijn er naar schatting 80 tot 90 plekken, maar het loket bedient iedereen die langskomt. De omzet hangt dus niet af van het aantal stoelen.'},
-   {view:'Start',icoon:'koffie',kop:'Het loket vult de rustige uren',tekst:'Ochtend, regen of winter: halen gaat altijd door. Zo is er klandizie op momenten dat de horeca stil is.'},
-   {view:'Productie',icoon:'brood',kop:'Geen bakkerij bouwen',tekst:'Westerbos levert het brood, wij bakken het af. Dat scheelt investering en personeel. Ambachtelijk aan de voorkant, efficiënt aan de achterkant.'},
-   {view:'Dakterras',icoon:'blijven',kop:'Van halen naar blijven',tekst:'Hapjes, wijn en pils maken van een kort bezoek een langer bezoek. Wie blijft, besteedt meer.'},
-   {view:'Boven',icoon:'groei',kop:'Het model in het kort',lijst:[['Partners','Westerbos, Mama\'s Koelkast, branderij, ijsboer, Amsterdamse makers'],['Gasten','buren, zwemmers en recreanten, omfietsers'],['Omzet','loket, eten, blijven, specials'],['Kosten','personeel, boot en ombouw, ligplaats, inkoop, energie']],klein:'De cijfers volgen in de business case.'}
-  ]},
-  {nr:8,naam:'Klein beginnen',klaar:true,stappen:[
-   {view:'Buurtloket',icoon:'loket',kop:'Dag één: loket en daghoreca',tekst:'Vanaf het begin zijn het loket en de daghoreca open, met een simpel assortiment.'},
-   {view:'Productie',icoon:'snack',kop:'Daarna: steeds verrassender',tekst:'Uit de keuken komen steeds leukere en verrassendere producten, en de collabs worden specialer.'},
-   {view:'Dakterras',icoon:'muziek',kop:'Dan: de specials',tekst:'Als de dag staat, volgen de avonden met de buurt.'},
-   {view:'Zwemsteiger',icoon:'mensen',kop:'Wie het doet',tekst:'Kai en Hidde, aangevuld door een team van buurtgenoten.'},
-   {view:'Gouden uur',icoon:'groei',kop:'Wat we willen bewijzen',lijst:[['Buurt','de buurt komt terug'],['Loket','het loket draait los van de horeca'],['Omfietsen','mensen komen er speciaal voor'],['Blijven','wie blijft, besteedt meer'],['Specials','de avonden bouwen aan de buurt']],klein:'De doelen per punt vullen we in met de business case.'}
+  {nr:6,id:'werkt',naam:'Waarom het werkt',stappen:[
+   {view:'Buurtloket',icoon:'loket',kop:'Het loket draait altijd',tekst:'Het loket bedient iedereen die langskomt, los van het aantal stoelen. Ochtend, regen of winter: halen gaat door, ook als de horeca stil is.'},
+   {view:'Productie',icoon:'brood',kop:'Geen bakkerij bouwen',tekst:'Westerbos levert het brood, wij bakken af en maken alleen zelf waar we het verschil maken. Dat scheelt investering en personeel: ambachtelijk aan de voorkant, efficiënt aan de achterkant.'},
+   {view:'Gouden uur',icoon:'groei',kop:'Klein beginnen',lijst:[['Dag één','loket en daghoreca, met een simpel assortiment'],['Daarna','verrassendere producten uit de keuken, specialere collabs'],['Dan','de avonden met de buurt']],klein:'Kai en Hidde, met een team van buurtgenoten.'},
+   {view:'Boven',icoon:'ster',kop:'Wat we willen bewijzen',lijst:[['Buurt','de buurt komt terug'],['Loket','het loket draait los van de horeca'],['Omfietsen','mensen komen er speciaal voor'],['Blijven','wie blijft, besteedt meer'],['Avonden','de specials bouwen aan de buurt']]}
   ]}
  ];
 
  const nav=$('#hoofdstukken'),paneel=$('#paneel'),opening=$('#opening'),titel=$('#titelkaart'),merk=$('#merk'),wrap=$('#wrap');
  const K=window.koffieboot;
- let actief=null,stapNr=0,timer=0;
+ if(!K)return;                                    // scène niet geladen: index.html toont al een foutmelding
+ let actief=null,stapNr=-1,timer=0,wachtId=0;
  const smal=()=>innerWidth<=700;
+ const twee=n=>String(n).padStart(2,'0');
  wrap.classList.add('start');
 
- // camera: de bestaande stand kiezen (scene.js beweegt), daarna het doel opschuiven zodat de boot naast het tekstvak valt
- // avond alleen aanzetten bij de specials; daarna terug naar dag. Zelf op Avond gezet? Dan blijft het avond.
- const BINNEN=new Set(['Binnen','Salon','Klep']);
+ // ---- camera ----
+ // De scène biedt camerastanden als knoppen in #views. We zoeken ze één keer op naam op en melden ontbrekende standen,
+ // zodat een hernoemde stand opvalt in de console in plaats van stil een hoofdstuk te breken.
+ const knop=naam=>[...views.querySelectorAll('button')].find(x=>x.textContent===naam);
+ HOOFDSTUKKEN.forEach(h=>h.stappen.forEach(s=>{if(!knop(s.view))console.warn('[verhaal] camerastand ontbreekt in de scène:',s.view,'(hoofdstuk '+h.nr+')')}));
+
+ // avond alleen voor stappen met avond:true; daarna terug naar dag. Zet de bezoeker zelf Avond aan, dan blijft dat zo.
  let gedwongen=false;
- function avond(aan){const b=[...views.querySelectorAll('button')].find(x=>x.textContent==='Avond'||x.textContent==='Dag');if(!b)return;const nu=b.textContent==='Dag';
+ function avond(aan){const b=knop('Avond')||knop('Dag');if(!b)return;const nu=b.textContent==='Dag';
   if(aan){if(!nu)b.click();gedwongen=true}else if(gedwongen){if(nu)b.click();gedwongen=false}}
+
+ // stand kiezen en het doel opschuiven, zodat de boot naast het tekstvak valt (rechts op desktop, onderin op telefoon)
  function camera(naam,vrij,nacht){
   avond(nacht);
-  const b=[...views.querySelectorAll('button')].find(x=>x.textContent===naam);if(!b)return;b.click();
-  if(vrij||BINNEN.has(naam)||!K||!K.goal)return;   // binnenstanden niet verschuiven, anders gaat de camera door de wand
+  const b=knop(naam);if(!b)return;b.click();
+  if(vrij||!K.goal)return;
   const g=K.goal;
-  if(smal()){g.t.y-=g.r*.13}                       // tekstvak onderin: boot hoger in beeld
-  else{const f=g.r*.2;g.t.x+=-Math.cos(g.th)*f;g.t.z+=-Math.sin(g.th)*f}  // tekstvak rechts: boot naar links
+  if(smal())g.t.y-=g.r*.13;
+  else{const f=g.r*.2;g.t.x-=Math.cos(g.th)*f;g.t.z-=Math.sin(g.th)*f}
+ }
+ // wacht tot de camera (bijna) bij het doel is, met een maximum, en roep dan klaar() aan
+ function naAankomst(klaar,min=450,max=2600){
+  cancelAnimationFrame(wachtId);const C=K.camera,g=K.goal,t0=performance.now();
+  const stap=()=>{const t=performance.now()-t0,sp=Math.sin(g.ph);
+   const doel=new THREE.Vector3(g.t.x+g.r*sp*Math.sin(g.th),g.t.y+g.r*Math.cos(g.ph),g.t.z-g.r*sp*Math.cos(g.th));
+   if((t>min&&C.position.distanceTo(doel)<Math.max(.4,g.r*.08))||t>max)klaar();else wachtId=requestAnimationFrame(stap)};
+  wachtId=requestAnimationFrame(stap);
  }
 
- // camerastanden verbergen behalve Dag/Avond
  function opruimen(){views.querySelectorAll('button').forEach(b=>{if(b.textContent!=='Avond'&&b.textContent!=='Dag')b.classList.add('verborgen')})}
  opruimen();new MutationObserver(opruimen).observe(views,{childList:true});
 
  // openingsbeeld: boot iets lager, zodat het bord in het midden boven de boot hangt
- function startBeeld(){camera('Gouden uur',true);if(K&&K.goal)K.goal.t.y+=K.goal.r*(smal()?.16:.11)}
+ function startBeeld(){camera('Gouden uur',true);K.goal.t.y+=K.goal.r*(smal()?.16:.11)}
  startBeeld();
 
- const twee=n=>String(n).padStart(2,'0');
- HOOFDSTUKKEN.forEach(h=>{const b=document.createElement('button');b.type='button';b.disabled=!h.klaar;b.dataset.nr=h.nr;
-  b.title=h.klaar?h.naam:h.naam+' (volgt)';b.innerHTML='<span class="nr">'+twee(h.nr)+'</span><span class="naam">'+h.naam+'</span>';
-  b.onclick=()=>open(h);nav.appendChild(b)});
+ // ---- hoofdstukkenbalk ----
+ HOOFDSTUKKEN.forEach(h=>{const b=document.createElement('button');b.type='button';b.dataset.nr=h.nr;b.title=h.naam;
+  b.innerHTML='<span class="nr">'+twee(h.nr)+'</span><span class="naam">'+h.naam+'</span>';
+  b.onclick=()=>naar(h,0);nav.appendChild(b)});
 
  function stapHtml(s,k){
   let inh='';
@@ -123,55 +118,91 @@
   return '<div class="stap" data-k="'+k+'">'+IC[s.icoon]+'<div><h3>'+s.kop+'</h3><div class="lijf"><div>'+inh+'</div></div></div></div>';
  }
 
- function open(h){
+ // ---- adres: #pont, #halen-2 enz. Zo kun je een link naar een hoofdstuk of stap sturen en werkt de terugknop ----
+ const adres=(h,n)=>'#'+h.id+(n>0?'-'+(n+1):'');
+ function leesAdres(){const m=location.hash.slice(1).match(/^([a-z]+)(?:-(\d+))?$/);if(!m)return null;
+  const h=HOOFDSTUKKEN.find(x=>x.id===m[1]);if(!h)return null;return {h,n:Math.min(h.stappen.length-1,Math.max(0,(+m[2]||1)-1))}}
+ function zetAdres(h,n,nieuw){const a=h?adres(h,n):location.pathname+location.search;if(location.hash===(h?a:''))return;
+  history[nieuw?'pushState':'replaceState'](null,'',a)}
+
+ function aanBoord(){opening.classList.add('weg');wrap.classList.remove('start');nav.hidden=false;merk.hidden=false}
+
+ // naar hoofdstuk h, stap n. Eerst de titel, dan (als de camera er is) het tekstvak.
+ function naar(h,n,vanAdres){
+  aanBoord();
+  if(actief===h){zet(n);if(!vanAdres)zetAdres(h,n,false);return}
   clearTimeout(timer);actief=h;stapNr=-1;
-  nav.querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.nr===h.nr));
-  // 1. eerst de titel, los op het beeld
+  if(!vanAdres)zetAdres(h,n,true);
+  nav.querySelectorAll('button').forEach(b=>{const on=+b.dataset.nr===h.nr;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current')});
   titel.classList.remove('in');void titel.offsetWidth;
-  titel.innerHTML='<div class="oog">Hoofdstuk '+twee(h.nr)+'</div><h2>'+h.naam+'</h2>';titel.classList.add('in');
+  titel.innerHTML='<div class="oog">Hoofdstuk '+twee(h.nr)+' van '+twee(HOOFDSTUKKEN.length)+'</div><h2>'+h.naam+'</h2>';titel.classList.add('in');
   paneel.classList.remove('open');paneel.hidden=true;
-  camera(h.stappen[0].view,false,h.stappen[0].avond);
-  // 2. dan het tekstvak
-  timer=setTimeout(()=>{
+  camera(h.stappen[n].view,false,h.stappen[n].avond);
+  naAankomst(()=>{
+   if(actief!==h)return;
    paneel.innerHTML='<div class="p-voortgang"><i></i></div><button type="button" class="p-sluit" aria-label="Sluiten">×</button><div class="p-stappen"></div>'+
     '<div class="p-nav"><button type="button" class="terug">← Terug</button><span class="teller"></span><button type="button" class="volg"></button></div>';
    paneel.querySelector('.p-sluit').onclick=sluit;
-   paneel.querySelector('.terug').onclick=()=>zet(stapNr-1);
-   paneel.querySelector('.volg').onclick=()=>stapNr>=h.stappen.length-1?naarVolgende():zet(stapNr+1);
-   paneel.querySelector('.p-stappen').onclick=e=>{const st=e.target.closest('.stap.dicht');if(st)zet(+st.dataset.k)};
+   paneel.querySelector('.terug').onclick=()=>stap(-1);
+   paneel.querySelector('.volg').onclick=()=>stap(1);
+   paneel.querySelector('.p-stappen').onclick=e=>{const st=e.target.closest('.stap.dicht');if(st){zet(+st.dataset.k);zetAdres(h,+st.dataset.k,false)}};
    paneel.hidden=false;requestAnimationFrame(()=>paneel.classList.add('open'));
-   zet(0,true);
-  },900);
+   zet(n,true);
+  },700,1800);
  }
 
  // stap tonen: het vak groeit met een stap; eerdere stappen klappen in tot één regel (klik = terug naar die stap)
  function zet(n,eerste){
   const h=actief;if(!h||n<0||n>=h.stappen.length||n===stapNr)return;
-  const st=paneel.querySelector('.p-stappen');
-  // stappen bijmaken of weghalen zodat er precies n+1 staan
+  const st=paneel.querySelector('.p-stappen');if(!st)return;
   while(st.children.length>n+1)st.lastElementChild.remove();
   while(st.children.length<n+1){st.insertAdjacentHTML('beforeend',stapHtml(h.stappen[st.children.length],st.children.length));st.lastElementChild.classList.add('nieuw')}
   [...st.children].forEach((e,k)=>e.classList.toggle('dicht',k<n));
   stapNr=n;
   paneel.querySelector('.p-voortgang i').style.width=((n+1)/h.stappen.length*100)+'%';
   paneel.querySelector('.teller').textContent=twee(n+1)+' / '+twee(h.stappen.length);
-  paneel.querySelector('.terug').disabled=n===0;
-  const last=n>=h.stappen.length-1,nx=HOOFDSTUKKEN.find(x=>x.nr>h.nr&&x.klaar);
-  paneel.querySelector('.volg').innerHTML=(last?(nx?'Hoofdstuk '+twee(nx.nr):'Opnieuw'):'Volgende')+' <span aria-hidden="true">→</span>';
+  paneel.querySelector('.terug').disabled=n===0&&h.nr===1;
+  const last=n>=h.stappen.length-1,nx=HOOFDSTUKKEN[h.nr];
+  paneel.querySelector('.volg').innerHTML=(last?(nx?'Hoofdstuk '+twee(nx.nr):'Terug naar begin'):'Volgende')+' <span aria-hidden="true">→</span>';
   if(!eerste)camera(h.stappen[n].view,false,h.stappen[n].avond);
   setTimeout(()=>st.scrollTo({top:st.scrollHeight,behavior:'smooth'}),60);
  }
- function naarVolgende(){const nx=HOOFDSTUKKEN.find(x=>x.nr>actief.nr&&x.klaar);open(nx||actief)}
- function sluit(){clearTimeout(timer);paneel.classList.remove('open');setTimeout(()=>paneel.hidden=true,500);titel.innerHTML='';actief=null;
-  nav.querySelectorAll('button').forEach(b=>b.classList.remove('on'));camera('Gouden uur',true)}
+ // één stap verder of terug, ook over de grens van een hoofdstuk heen
+ function stap(r){
+  if(!actief)return;const h=actief,n=stapNr+r;
+  if(n>=0&&n<h.stappen.length){zet(n);zetAdres(h,n,false);return}
+  if(r>0){const nx=HOOFDSTUKKEN[h.nr];nx?naar(nx,0):naarBegin()}
+  else{const vg=HOOFDSTUKKEN[h.nr-2];if(vg)naar(vg,vg.stappen.length-1)}
+ }
+ function sluit(){cancelAnimationFrame(wachtId);paneel.classList.remove('open');setTimeout(()=>{if(!actief)paneel.hidden=true},500);titel.innerHTML='';actief=null;stapNr=-1;
+  nav.querySelectorAll('button').forEach(b=>{b.classList.remove('on');b.removeAttribute('aria-current')});avond(false);camera('Gouden uur',true)}
+ function naarBegin(vanAdres){sluit();startBeeld();merk.hidden=true;nav.hidden=true;wrap.classList.add('start');opening.classList.remove('weg');if(!vanAdres)zetAdres(null,0,true)}
 
- // opening: bord in het midden; "Stap aan boord" opent hoofdstuk 1. Het woordmerk linksboven brengt je terug.
- $('#start').onclick=()=>{opening.classList.add('weg');wrap.classList.remove('start');nav.hidden=false;merk.hidden=false;open(HOOFDSTUKKEN[0])};
- merk.onclick=()=>{sluit();startBeeld();merk.hidden=true;nav.hidden=true;wrap.classList.add('start');opening.classList.remove('weg')};
+ $('#start').onclick=()=>naar(HOOFDSTUKKEN[0],0);
+ merk.onclick=()=>naarBegin();
+
+ // terugknop van de browser en gedeelde links
+ addEventListener('popstate',()=>{const a=leesAdres();if(a)naar(a.h,a.n,true);else if(actief)naarBegin(true)});
+ {const a=leesAdres();if(a)naar(a.h,a.n,true)}
+
+ // toetsen
  addEventListener('keydown',e=>{
   if(!actief||e.target.closest('input,textarea'))return;
   if(e.key==='Escape')sluit();
-  else if(e.key==='ArrowRight'){const v=paneel.querySelector('.volg');if(v)v.click()}
-  else if(e.key==='ArrowLeft')zet(stapNr-1);
+  else if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();stap(1)}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();stap(-1)}
  });
+
+ // scrollen door het verhaal: met het wiel ga je een stap verder of terug. Inzoomen blijft kan met Ctrl/⌘ + scrollen of knijpen.
+ let wielSom=0,wielRust=0;
+ wrap.addEventListener('wheel',e=>{
+  if(!actief||e.ctrlKey||e.metaKey)return;
+  if(e.target.closest('.p-stappen')){const s=e.target.closest('.p-stappen');if(s.scrollHeight>s.clientHeight+2)return}
+  e.preventDefault();e.stopPropagation();
+  const nu=performance.now();if(nu<wielRust)return;
+  wielSom+=e.deltaY;if(Math.abs(wielSom)>60){stap(wielSom>0?1:-1);wielSom=0;wielRust=nu+900}
+ },{capture:true,passive:false});
+
+ // venster groter of kleiner: camera opnieuw naast het tekstvak zetten
+ let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(actief&&stapNr>=0)camera(actief.stappen[stapNr].view,false,actief.stappen[stapNr].avond);else if(!actief)startBeeld()},250)});
 })();

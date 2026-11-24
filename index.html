@@ -7,37 +7,27 @@
 <meta name="description" content="De Koffieboot: een Amsterdamse pont als buurtkoffiezaak aan het Zijkanaal in Amsterdam-Noord.">
 <meta name="theme-color" content="#1E4FA8">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@900&family=Barlow+Condensed:wght@400;500;600&family=Barlow:wght@400;500;600&family=Inter:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&display=swap">
 <style>
-/* Website: de scène vult het hele scherm; titel in posterletter eroverheen, camerastanden als knoppen onderin */
+/* Website: de scène vult het hele scherm; de verhaallaag (verhaal.css, js/verhaal.js) ligt eroverheen */
 :root{--blauw:#1D3F87;--creme:#f4efe4;--inkt:#16213a}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:#cfe3df;color:var(--inkt);overflow:hidden}
 #wrap{position:fixed;inset:0;height:100dvh;background:#cfe3df;touch-action:none;overflow:hidden}
 #c{display:block;width:100%;height:100%}
-#titel{position:absolute;z-index:2;left:max(18px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top));right:16px;pointer-events:none}
-h1{margin:0;
- font:900 clamp(46px,10vw,124px)/.9 'Big Shoulders Stencil','Big Shoulders Stencil Display',Impact,sans-serif;letter-spacing:.01em;text-transform:uppercase;color:var(--creme);
- text-shadow:3px 3px 0 var(--blauw),6px 6px 0 rgba(22,33,58,.25);-webkit-text-stroke:1px rgba(30,79,168,.35)}
-#titel p{margin:.55em 0 0 .2em;font:700 clamp(11px,1.45vw,17px)/1.35 Inter,system-ui,sans-serif;letter-spacing:.16em;color:var(--creme);text-shadow:1px 1px 0 var(--blauw),0 1px 6px rgba(22,33,58,.45)}
-#titel p span{white-space:nowrap}
 /* knoppen uit de werkversie: Opbouw, Schoon beeld en hulptekst blijven verborgen */
 #hint,#opb,#opbLabel,#err{display:none!important}
 #views{position:absolute;z-index:2;left:0;right:0;bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:8px;padding:0 max(14px,env(safe-area-inset-left));
  overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;justify-content:safe center}
 #views::-webkit-scrollbar{display:none}
-#views button{flex:0 0 auto;font:700 13px/1 Inter,system-ui,sans-serif;padding:10px 15px;border:2px solid var(--blauw);border-radius:999px;background:var(--creme);color:var(--blauw);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+#views button{flex:0 0 auto;font:700 13px/1 Barlow,system-ui,sans-serif;padding:10px 15px;border:2px solid var(--blauw);border-radius:999px;background:var(--creme);color:var(--blauw);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 #views button:hover{background:#fff}
 #views button.on{background:var(--blauw);color:var(--creme)}
 #views button:focus-visible{outline:3px solid var(--creme);outline-offset:2px}
 #views button.verborgen{display:none}
-#laden{position:absolute;inset:0;z-index:3;display:grid;place-items:center;font:700 16px Inter,system-ui,sans-serif;color:var(--blauw);background:#cfe3df;transition:opacity .6s}
+#laden{position:absolute;inset:0;z-index:3;display:grid;place-items:center;font:700 16px Barlow,system-ui,sans-serif;color:var(--blauw);background:#cfe3df;transition:opacity .6s}
 #laden.weg{opacity:0;pointer-events:none}
 #fout{position:absolute;inset:0;display:none;place-items:center;padding:24px;text-align:center;font:15px system-ui,sans-serif}
-#still{position:absolute;inset:0;z-index:1;background:transparent center/cover no-repeat;opacity:0;transition:opacity 1.4s ease;pointer-events:none}
-#still.aan{opacity:1}
-#stilltip{position:absolute;z-index:2;left:50%;bottom:calc(max(12px,env(safe-area-inset-bottom)) + 52px);transform:translateX(-50%);max-width:calc(100% - 32px);font:600 12px/1.3 Inter,system-ui,sans-serif;letter-spacing:.04em;color:var(--creme);background:rgba(22,33,58,.55);padding:7px 12px;border-radius:999px;opacity:0;transition:opacity 1s ease .4s;pointer-events:none;text-align:center}
-#stilltip.aan{opacity:1}
 </style>
 <link rel="stylesheet" href="verhaal.css">
 </head>
@@ -52,7 +42,7 @@ h1{margin:0;
   <button id="start" type="button">Stap aan boord <span aria-hidden="true">→</span></button>
  </header>
  <button id="merk" type="button" hidden aria-label="Terug naar het begin">DE KOFFIEBOOT</button>
- <div id="titelkaart" aria-live="polite"></div>
+ <div id="titelkaart"></div>
  <section id="paneel" aria-live="polite" hidden></section>
  <nav id="hoofdstukken" aria-label="Hoofdstukken" hidden></nav>
  <canvas id="c" aria-label="3D-scène van De Koffieboot aan het Zijkanaal"></canvas>

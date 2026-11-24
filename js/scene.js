@@ -1895,7 +1895,7 @@ new ResizeObserver(size).observe(wrap);size();
  const leeg=[];scene.traverse(o=>{if(o.type==='Group'&&!o.children.length&&!o.userData.niveau&&o!==pont&&!uit.has(o))leeg.push(o)});leeg.forEach(o=>o.parent&&o.parent.remove(o));
  scene.updateMatrixWorld(true);window.koffieboot&&(window.koffieboot.samengevoegd={voor,na})})();
 const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-function tick(){const k=calm?1:.09;view.t.lerp(goal.t,k);view.r+=(goal.r-view.r)*k;view.th+=(goal.th-view.th)*k;view.ph+=(goal.ph-view.ph)*k;place();
+function tick(){const k=calm?1:1-Math.pow(.91,Math.min(6,(performance.now()-(tick.t||performance.now()))/16.667));/* even snel bij 60 en 120 Hz */view.t.lerp(goal.t,k);view.r+=(goal.r-view.r)*k;view.th+=(goal.th-view.th)*k;view.ph+=(goal.ph-view.ph)*k;place();
  const nu=performance.now();const dt=Math.min(.1,(nu-(tick.t||nu))/1000);tick.t=nu;
  if(!calm)fiets.forEach(f=>{f.g.position.x+=f.dir*f.sp*dt;if(f.g.position.x>f.lim[1]||f.g.position.x<f.lim[0])f.g.position.x=f.dir>0?f.lim[0]:f.lim[1]});
  if(!calm)water.material.uniforms.time.value+=dt*.55;if(composer){grade.uniforms.time.value=(nu%1000)/1000;composer.render()}else renderer.render(scene,camera);requestAnimationFrame(tick)}
