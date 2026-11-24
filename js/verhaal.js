@@ -37,10 +37,10 @@
   ]},
   {nr:2,id:'halen',naam:'Halen: Het Buurtloket',stappen:[
    {view:'Start',icoon:'loket',kop:'Voorop het loket',tekst:'Op het voordek haal je brood, koffie, boodschappen en broodjes. Het loket heeft een eigen rij aan de steigerkant, zodat je niet tussen de zittende gasten door hoeft. Wie vooraf bestelt, haalt op in een tijdvak.'},
-   {view:'Buurtloket',icoon:'brood',kop:'De beste in hun vak',tekst:'Waar anderen aantoonbaar beter zijn, werken we samen. Divers: traditioneel, en soms vooruitstrevend en hip.',lijst:[['Brood','Westerbos'],['Koffie','een Amsterdamse branderij'],['IJs','een Amsterdamse ijsboer'],['Maaltijden','Mama\'s Koelkast, ook stamppotjes om mee te nemen'],['Beleg','de beste en leukste Amsterdamse makers']]}
+   {view:'Buurtloket',icoon:'brood',kop:'De beste in hun vak',tekst:'Waar anderen aantoonbaar beter zijn, werken we samen. Divers: traditioneel, en soms vooruitstrevend en hip.',lijst:[['Brood','Westerbos'],['Koffie','een Amsterdamse branderij'],['IJs','een Amsterdamse ijsboer'],['Maaltijden','Mama\'s Koelkast, om mee te nemen, ook stamppotjes'],['Beleg','de beste en leukste Amsterdamse makers']]}
   ]},
   {nr:3,id:'keuken',naam:'De keuken',stappen:[
-   {view:'Zijaanzicht',icoon:'keuken',kop:'Het hart van de boot',tekst:'In het midden van de boot zit de keuken, achter glas en zichtbaar vanaf de steiger. Hier bakken we het brood af. Alles wat je haalt bij het loket en alles wat je eet aan boord, komt hier vandaan.'},
+   {view:'Zijaanzicht',icoon:'keuken',kop:'Het hart van de boot',tekst:'In het midden van de boot zit de keuken, achter glas en zichtbaar vanaf de steiger. Hier wordt het brood afgebakken, worden de broodjes belegd en de snacks gemaakt. Zo verbindt de keuken het loket voorop met de kajuit achterin.'},
    {view:'Productie',icoon:'snack',kop:'Zelf gemaakt: de snacks',tekst:'Waar wij het verschil maken, doen we het zelf. Ouderwetse klassiekers in een nieuw jasje, zoals het kaneelbroodje dat Wimpie heet. Of nieuwe hits, zoals een half croissantje als hoorntje met ijs erin.'}
   ]},
   {nr:4,id:'blijven',naam:'Eten en blijven',stappen:[
@@ -50,12 +50,12 @@
   ]},
   {nr:5,id:'jaar',naam:'Door het jaar',stappen:[
    {view:'Zwemsteiger',icoon:'ijs',kop:'Zomer',tekst:'In de zomer draait de boot om de zwemsteiger en het terras, met ijs na het zwemmen.'},
-   {view:'Zijaanzicht',icoon:'maaltijd',kop:'Winter',tekst:'In de winter wordt de kajuit het warme hart en neem je een stamppotje mee naar huis. De basis blijft het hele jaar: brood, koffie, broodjes en snacks.'},
+   {view:'Zijaanzicht',icoon:'maaltijd',kop:'Winter',tekst:'In de winter wordt de kajuit het warme hart, en neem je na het werk een stamppotje mee naar huis. De basis blijft het hele jaar: brood, koffie, broodjes en snacks.'},
    {view:'Dakterras',avond:true,icoon:'muziek',kop:'Soms: de buurt aan boord',tekst:'Zo nu en dan gooien we de deuren open.',lijst:[['Dak','een artiest, met bootjes in het water eromheen'],['Steiger','een foodfestival met de makers van ons beleg'],['Kajuit','bingo en de grootste quiz van Noord']]}
   ]},
   {nr:6,id:'werkt',naam:'Waarom het werkt',stappen:[
    {view:'Buurtloket',icoon:'loket',kop:'Het loket draait altijd',tekst:'Het loket bedient iedereen die langskomt, los van het aantal stoelen. Ochtend, regen of winter: halen gaat door, ook als de horeca stil is.'},
-   {view:'Productie',icoon:'brood',kop:'Geen bakkerij bouwen',tekst:'Westerbos levert het brood, wij bakken af en maken alleen zelf waar we het verschil maken. Dat scheelt investering en personeel: ambachtelijk aan de voorkant, efficiënt aan de achterkant.'},
+   {view:'Productie',icoon:'brood',kop:'Samen met de makers van de stad',tekst:'Westerbos levert het brood, Mama\'s Koelkast de maaltijden om mee te nemen. Zo hoeven we op de boot niets te bouwen wat ruimte en geld vreet en het concept smaller maakt. Door de kracht van makers in de stad te bundelen, kunnen we twee dingen tegelijk zijn: een buurtwinkel voor elk eet- en snackmoment van de dag, en een daghorecazaak.'},
    {view:'Gouden uur',icoon:'groei',kop:'Klein beginnen',lijst:[['Dag één','loket en daghoreca, met een simpel assortiment'],['Daarna','verrassendere producten uit de keuken, specialere collabs'],['Dan','de avonden met de buurt']],klein:'Kai en Hidde, met een team van buurtgenoten.'},
    {view:'Boven',icoon:'ster',kop:'Wat we willen bewijzen',lijst:[['Buurt','de buurt komt terug'],['Loket','het loket draait los van de horeca'],['Omfietsen','mensen komen er speciaal voor'],['Blijven','wie blijft, besteedt meer'],['Avonden','de specials bouwen aan de buurt']]}
   ]}
