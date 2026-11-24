@@ -36,7 +36,7 @@
    {view:'Boven',icoon:'kraan',kop:'Horeca aan het water',tekst:'In de aanbesteding Horeca aan het water (De Bongerd) zoekt de gemeente horeca bij de zwemsteiger. De Koffieboot is ons antwoord: van voor naar achter een loket, een keuken en een plek om te blijven.'}
   ]},
   {nr:2,id:'halen',naam:'Halen: Het Buurtloket',stappen:[
-   {view:'Start',hoek:{ph:1.12},icoon:'loket',kop:'Voorop het loket',tekst:'Op het voordek haal je brood, koffie, boodschappen en broodjes. Het loket heeft een eigen rij aan de steigerkant, zodat je niet tussen de zittende gasten door hoeft. Er ligt altijd vers brood en een basis aan maaltijden klaar. Grotere bestellingen of je maaltijd voor morgen? Bestel een dag vooraf, dan ligt het voor je klaar.'},
+   {view:'Start',icoon:'loket',kop:'Voorop het loket',tekst:'Op het voordek haal je brood, koffie, boodschappen en broodjes. Het loket heeft een eigen rij aan de steigerkant, zodat je niet tussen de zittende gasten door hoeft. Er ligt altijd vers brood en een basis aan maaltijden klaar. Grotere bestellingen of je maaltijd voor morgen? Bestel een dag vooraf, dan ligt het voor je klaar.'},
    {view:'Buurtloket',icoon:'brood',kop:'De beste in hun vak',tekst:'Waar anderen aantoonbaar beter zijn, werken we samen. Divers: traditioneel, en soms vooruitstrevend en hip.',lijst:[['Brood','Westerbos'],['Koffie','een Amsterdamse branderij'],['IJs','een Amsterdamse ijsboer'],['Maaltijden','Mama\'s Koelkast, om mee te nemen, ook stamppotjes'],['Beleg','de beste en leukste Amsterdamse makers']]}
   ]},
   {nr:3,id:'keuken',naam:'De keuken',stappen:[
