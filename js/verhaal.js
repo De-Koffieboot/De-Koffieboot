@@ -36,7 +36,7 @@
    {view:'Boven',icoon:'kraan',kop:'Horeca aan het water',tekst:'In de aanbesteding Horeca aan het water (De Bongerd) zoekt de gemeente horeca bij de zwemsteiger. De Koffieboot is ons antwoord: van voor naar achter een loket, een keuken en een plek om te blijven.'}
   ]},
   {nr:2,id:'halen',naam:'Halen: Het Buurtloket',stappen:[
-   {view:'Start',icoon:'loket',kop:'Voorop het loket',tekst:'Op het voordek haal je brood, koffie, boodschappen en broodjes. Het loket heeft een eigen rij aan de steigerkant, zodat je niet tussen de zittende gasten door hoeft. Wie vooraf bestelt, haalt op in een tijdvak.'},
+   {view:'Start',icoon:'loket',kop:'Voorop het loket',tekst:'Op het voordek haal je brood, koffie, boodschappen en broodjes. Het loket heeft een eigen rij aan de steigerkant, zodat je niet tussen de zittende gasten door hoeft. Er ligt altijd vers brood en een basis aan maaltijden klaar. Grotere bestellingen of je maaltijd voor morgen? Bestel een dag vooraf, dan ligt het voor je klaar.'},
    {view:'Buurtloket',icoon:'brood',kop:'De beste in hun vak',tekst:'Waar anderen aantoonbaar beter zijn, werken we samen. Divers: traditioneel, en soms vooruitstrevend en hip.',lijst:[['Brood','Westerbos'],['Koffie','een Amsterdamse branderij'],['IJs','een Amsterdamse ijsboer'],['Maaltijden','Mama\'s Koelkast, om mee te nemen, ook stamppotjes'],['Beleg','de beste en leukste Amsterdamse makers']]}
   ]},
   {nr:3,id:'keuken',naam:'De keuken',stappen:[
@@ -54,7 +54,7 @@
    {view:'Dakterras',avond:true,icoon:'muziek',kop:'Soms: de buurt aan boord',tekst:'Zo nu en dan gooien we de deuren open.',lijst:[['Dak','een artiest, met bootjes in het water eromheen'],['Steiger','een foodfestival met de makers van ons beleg'],['Kajuit','bingo en de grootste quiz van Noord']]}
   ]},
   {nr:6,id:'werkt',naam:'Waarom het werkt',stappen:[
-   {view:'Buurtloket',icoon:'loket',kop:'Het loket draait altijd',tekst:'Het loket bedient iedereen die langskomt, los van het aantal stoelen. Ochtend, regen of winter: halen gaat door, ook als de horeca stil is.'},
+   {view:'Buurtloket',icoon:'loket',kop:'Het loket draait altijd',tekst:'Het loket bedient iedereen die langskomt, los van het aantal stoelen. Ochtend, regen of winter: halen gaat door, ook als de horeca stil is. En omdat we bestellen een dag vooraf stimuleren, weten we beter wat er nodig is. Zo grijpen we minder mis en gooien we minder weg.'},
    {view:'Productie',icoon:'brood',kop:'Samen met de makers van de stad',tekst:'Westerbos levert het brood, Mama\'s Koelkast de maaltijden om mee te nemen. Zo hoeven we op de boot niets te bouwen wat ruimte en geld vreet en het concept smaller maakt. Door de kracht van makers in de stad te bundelen, kunnen we twee dingen tegelijk zijn: een buurtwinkel voor elk eet- en snackmoment van de dag, en een daghorecazaak.'},
    {view:'Gouden uur',icoon:'groei',kop:'Klein beginnen',lijst:[['Dag één','loket en daghoreca, met een simpel assortiment'],['Daarna','verrassendere producten uit de keuken, specialere collabs'],['Dan','de avonden met de buurt']],klein:'Kai en Hidde, met een team van buurtgenoten.'},
    {view:'Boven',icoon:'ster',kop:'Wat we willen bewijzen',lijst:[['Buurt','de buurt komt terug'],['Loket','het loket draait los van de horeca'],['Omfietsen','mensen komen er speciaal voor'],['Blijven','wie blijft, besteedt meer'],['Avonden','de specials bouwen aan de buurt']]}
