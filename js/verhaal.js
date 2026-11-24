@@ -36,7 +36,7 @@
    {view:'Boven',icoon:'kraan',kop:'Horeca aan het water',tekst:'In de aanbesteding Horeca aan het water (De Bongerd) zoekt de gemeente horeca bij de zwemsteiger. De Koffieboot is ons antwoord: van voor naar achter een loket, een keuken en een plek om te blijven.'}
   ]},
   {nr:2,id:'halen',naam:'Halen: Het Buurtloket',stappen:[
-   {view:'Start',icoon:'loket',kop:'Voorop het loket',tekst:'Op het voordek haal je brood, koffie, boodschappen en broodjes. Het loket heeft een eigen rij aan de steigerkant, zodat je niet tussen de zittende gasten door hoeft. Er ligt altijd vers brood en een basis aan maaltijden klaar. Grotere bestellingen of je maaltijd voor morgen? Bestel een dag vooraf, dan ligt het voor je klaar.'},
+   {view:'Start',hoek:{ph:1.12},icoon:'loket',kop:'Voorop het loket',tekst:'Op het voordek haal je brood, koffie, boodschappen en broodjes. Het loket heeft een eigen rij aan de steigerkant, zodat je niet tussen de zittende gasten door hoeft. Er ligt altijd vers brood en een basis aan maaltijden klaar. Grotere bestellingen of je maaltijd voor morgen? Bestel een dag vooraf, dan ligt het voor je klaar.'},
    {view:'Buurtloket',icoon:'brood',kop:'De beste in hun vak',tekst:'Waar anderen aantoonbaar beter zijn, werken we samen. Divers: traditioneel, en soms vooruitstrevend en hip.',lijst:[['Brood','Westerbos'],['Koffie','een Amsterdamse branderij'],['IJs','een Amsterdamse ijsboer'],['Maaltijden','Mama\'s Koelkast, om mee te nemen, ook stamppotjes'],['Beleg','de beste en leukste Amsterdamse makers']]}
   ]},
   {nr:3,id:'keuken',naam:'De keuken',stappen:[
@@ -81,11 +81,13 @@
   if(aan){if(!nu)b.click();gedwongen=true}else if(gedwongen){if(nu)b.click();gedwongen=false}}
 
  // stand kiezen en het doel opschuiven, zodat de boot naast het tekstvak valt (rechts op desktop, onderin op telefoon)
- function camera(naam,vrij,nacht){
+ function camera(naam,vrij,nacht,hoek){
   avond(nacht);
   const b=knop(naam);if(!b)return;b.click();
-  if(vrij||!K.goal)return;
+  if(!K.goal)return;
   const g=K.goal;
+  if(hoek)Object.assign(g,hoek);                  // eigen kijkhoek per stap, bv. hoger kijken over een boom heen
+  if(vrij)return;
   if(smal())g.t.y-=g.r*.13;
   else{const f=g.r*.2;g.t.x-=Math.cos(g.th)*f;g.t.z-=Math.sin(g.th)*f}
  }
@@ -137,7 +139,7 @@
   titel.classList.remove('in');void titel.offsetWidth;
   titel.innerHTML='<div class="oog">Hoofdstuk '+twee(h.nr)+' van '+twee(HOOFDSTUKKEN.length)+'</div><h2>'+h.naam+'</h2>';titel.classList.add('in');
   paneel.classList.remove('open');paneel.hidden=true;
-  camera(h.stappen[n].view,false,h.stappen[n].avond);
+  camera(h.stappen[n].view,false,h.stappen[n].avond,h.stappen[n].hoek);
   naAankomst(()=>{
    if(actief!==h)return;
    paneel.innerHTML='<div class="p-voortgang"><i></i></div><button type="button" class="p-sluit" aria-label="Sluiten">×</button><div class="p-stappen"></div>'+
@@ -164,7 +166,7 @@
   paneel.querySelector('.terug').disabled=n===0&&h.nr===1;
   const last=n>=h.stappen.length-1,nx=HOOFDSTUKKEN[h.nr];
   paneel.querySelector('.volg').innerHTML=(last?(nx?'Hoofdstuk '+twee(nx.nr):'Terug naar begin'):'Volgende')+' <span aria-hidden="true">→</span>';
-  if(!eerste)camera(h.stappen[n].view,false,h.stappen[n].avond);
+  if(!eerste)camera(h.stappen[n].view,false,h.stappen[n].avond,h.stappen[n].hoek);
   setTimeout(()=>st.scrollTo({top:st.scrollHeight,behavior:'smooth'}),60);
  }
  // één stap verder of terug, ook over de grens van een hoofdstuk heen
@@ -204,5 +206,5 @@
  },{capture:true,passive:false});
 
  // venster groter of kleiner: camera opnieuw naast het tekstvak zetten
- let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(actief&&stapNr>=0)camera(actief.stappen[stapNr].view,false,actief.stappen[stapNr].avond);else if(!actief)startBeeld()},250)});
+ let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(actief&&stapNr>=0)camera(actief.stappen[stapNr].view,false,actief.stappen[stapNr].avond,actief.stappen[stapNr].hoek);else if(!actief)startBeeld()},250)});
 })();
