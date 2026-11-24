@@ -7,7 +7,7 @@
 <meta name="description" content="De Koffieboot: een Amsterdamse pont als buurtkoffiezaak aan het Zijkanaal in Amsterdam-Noord.">
 <meta name="theme-color" content="#1E4FA8">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@900&family=Barlow+Condensed:wght@500;600&family=Inter:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@900&family=Barlow+Condensed:wght@400;500;600&family=Barlow:wght@400;500;600&family=Inter:wght@600;700&display=swap">
 <style>
 /* Website: de scène vult het hele scherm; titel in posterletter eroverheen, camerastanden als knoppen onderin */
 :root{--blauw:#1D3F87;--creme:#f4efe4;--inkt:#16213a}
@@ -39,10 +39,22 @@ h1{margin:0;
 #stilltip{position:absolute;z-index:2;left:50%;bottom:calc(max(12px,env(safe-area-inset-bottom)) + 52px);transform:translateX(-50%);max-width:calc(100% - 32px);font:600 12px/1.3 Inter,system-ui,sans-serif;letter-spacing:.04em;color:var(--creme);background:rgba(22,33,58,.55);padding:7px 12px;border-radius:999px;opacity:0;transition:opacity 1s ease .4s;pointer-events:none;text-align:center}
 #stilltip.aan{opacity:1}
 </style>
+<link rel="stylesheet" href="verhaal.css">
 </head>
 <body>
 <div id="wrap">
- <div id="titel"><h1>De Koffieboot</h1><p><span>SNEL GENOEG OM MEE TE NEMEN.</span> <span>WARM GENOEG OM TE BLIJVEN</span></p></div>
+ <div id="vignet" aria-hidden="true"></div>
+ <header id="opening">
+  <div class="straatbord" role="heading" aria-level="1">
+   <span class="big">DE KOFFIEBOOT</span>
+   <span class="small">snel genoeg om te halen, warm genoeg om te blijven</span>
+  </div>
+  <button id="start" type="button">Stap aan boord <span aria-hidden="true">→</span></button>
+ </header>
+ <button id="merk" type="button" hidden aria-label="Terug naar het begin">DE KOFFIEBOOT</button>
+ <div id="titelkaart" aria-live="polite"></div>
+ <section id="paneel" aria-live="polite" hidden></section>
+ <nav id="hoofdstukken" aria-label="Hoofdstukken" hidden></nav>
  <canvas id="c" aria-label="3D-scène van De Koffieboot aan het Zijkanaal"></canvas>
  <div id="hint"></div>
  <div id="laden">De boot komt eraan…</div>
@@ -60,5 +72,6 @@ h1{margin:0;
  v.querySelectorAll('button').forEach(b=>{if(b.textContent==='Opbouw'||b.textContent==='Schoon beeld')b.classList.add('verborgen');if(b.textContent==='Avond')v.appendChild(b)});
  if(window.koffieboot)document.getElementById('laden').classList.add('weg');else{document.getElementById('laden').style.display='none';document.getElementById('fout').style.display='grid'}})();
 </script>
+<script src="js/verhaal.js"></script>
 </body>
 </html>
