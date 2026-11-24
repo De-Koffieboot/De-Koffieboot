@@ -1509,9 +1509,9 @@ const FABLE=(()=>{
  for(let x=-270;x<=270;x+=26+rnd()*20)boom2(scene,x,124.5,.9+rnd()*.3,'wilg');
  for(let x=-290;x<=290;x+=2.2+rnd()*2.5){const r=.6+rnd()*.7;blad2(scene,rnd()*5|0,x,1.3+r*.4,123+rnd()*1.6,r*1.3,r*.8,r)}
  // kade: platanen op de oude plekken
- // de boom op [-48,-12] stond voor het loket (Kai, 24 nov): hij wordt nog wel 'gegroeid' maar in een losse groep die niet in de scène hangt, zodat de rest van de omgeving precies gelijk blijft
+ // de bomen op [-48,-12] en [-30,-16] stonden voor het loket (Kai, 24 nov; de tweede in de stand Start van de website): hij wordt nog wel 'gegroeid' maar in een losse groep die niet in de scène hangt, zodat de rest van de omgeving precies gelijk blijft
  const wegBoom=new THREE.Group();
- [[-70,-14,1],[-30,-16,1.1],[22,-13,1.2],[55,-15,1],[-120,-18,1.3],[-48,-12,.8],[-86,-15,.9],[-12,-20,.85],[14,-21,.8],[36,-12,.9],[78,-14,1],[-100,-12,.8],[-140,-14,1.1],[100,-16,1]].forEach(([x,z,s],i)=>boom2(x===-48&&z===-12?wegBoom:x>=0?noord:zuid,x,z,s*.9,i%5===3?'populier':'plataan'));
+ [[-70,-14,1],[-30,-16,1.1],[22,-13,1.2],[55,-15,1],[-120,-18,1.3],[-48,-12,.8],[-86,-15,.9],[-12,-20,.85],[14,-21,.8],[36,-12,.9],[78,-14,1],[-100,-12,.8],[-140,-14,1.1],[100,-16,1]].forEach(([x,z,s],i)=>boom2((x===-48&&z===-12)||(x===-30&&z===-16)?wegBoom:x>=0?noord:zuid,x,z,s*.9,i%5===3?'populier':'plataan'));
 
  // ---------- 3. woonarken: vijf Amsterdamse soorten ----------
  const Zb=118.4,y0=.55,bakM=verf(0xc29a55,{roughness:.9}),witK=verf(0xf3e4b8,{roughness:.6}),zwartK=verf(0x1d1d1f,{roughness:.6}),raamM=M(0xffffff,{roughness:.6,metalness:0,envMapIntensity:.3,map:T_RAAM,emissive:0xffc48a,emissiveMap:T_RAAM,emissiveIntensity:.12}),_rn=(raamM.name='arkraam'),
@@ -1846,7 +1846,7 @@ const opbouw=(()=>{
  const knoppen=new Map();let gekozen=null;
  function kies(o,zoom){gekozen=o;knoppen.forEach((b,k)=>b.classList.toggle('on',k===o));
   if(!o){kader.visible=false;lab.style.display='none';return}
-  scene.updateMatrixWorld(true);const bx=new THREE.Box3().setFromObject(o);kader.box.copy(bx);kader.visible=true;
+  scene.updateMatrixWorld(true);const bx=new THREE.Box3().setFromObject(o);kader.box.copy(bx);kader.visible=!document.querySelector('#views button.verborgen');
   const pad=[];for(let p=o;p&&p!==pont;p=p.parent)pad.unshift(p.name);lab.textContent=pad.join(' › ')+' · '+tel(o)+' vormen';lab.style.display='block';
   if(zoom){const c=bx.getCenter(new THREE.Vector3()),s=bx.getSize(new THREE.Vector3()).length();goal.t.copy(c);goal.r=Math.max(7,s*1.25+3);document.querySelectorAll('#views button').forEach(b=>{if(VIEWS[b.textContent])b.classList.remove('on')})}}
  pan.innerHTML='<h3>Opbouw van De Koffieboot</h3><p>9 hoofdgroepen. Klik een groep of onderdeel om erop in te zoomen, of klik op de boot zelf.</p>';
@@ -1996,6 +1996,8 @@ const SNEL=(()=>{
   vervaagt=1;cv.style.transition='opacity .16s ease-in';cv.style.opacity='0';
   setTimeout(()=>{view.t.copy(goal.t);view.r=goal.r;view.th=goal.th;view.ph=goal.ph;S.wek();
    requestAnimationFrame(()=>requestAnimationFrame(()=>{cv.style.transition='opacity .32s ease-out';cv.style.opacity='1';vervaagt=0}))},170)};
+ // selectiekader weg zodra je een camerastand kiest
+ {const v=document.getElementById('views');v&&v.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&VIEWS[b.textContent]){const kd=scene.children.find(o=>o.type==='Box3Helper');if(kd&&kd.visible){kd.visible=false;S.vuil=true}}})}
  window.koffieboot&&Object.assign(window.koffieboot,{wek:S.wek,snel:S,mensenLaden:true});
  return S})();
 const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
